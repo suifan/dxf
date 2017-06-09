@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    
+    <div>主页</div>
   </div>
 </template>
 

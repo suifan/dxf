@@ -3,7 +3,6 @@
 > 数据可视化工厂（Data Visualization Factory）
 
 # 项目结构
-  ├─ 主页
   ├─ 主题管理／
   ├   ├─ 主题上传
   ├   ├─ 主题信息
@@ -17,20 +16,24 @@
 ``` bash
 
 # install dependencies
-> yarn （or npm install)
+> yarn 
+#（or npm install)
 
 # serve with hot reload at localhost:9080
-> yarn run dev (or npm run dev)
+> yarn run dev 
+#(or npm run dev)
 
 # build electron application for production
-> yarn run build (or npm run build)
+> yarn run build 
+#(or npm run build)
 
 # run unit tests
-> yarn test (or npm test)
-
+> yarn test 
+#(or npm test)
 
 # lint all JS/Vue component files in `src/`
-> yarn run lint (or npm run lint)
+> yarn run lint 
+#(or npm run lint)
 
 ```
 
