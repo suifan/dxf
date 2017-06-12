@@ -3,6 +3,7 @@
 > 数据可视化工厂（Data Visualization Factory）
 
 # 项目结构
+  ├─ 主界面
   ├─ 主题管理／
   ├   ├─ 主题上传
   ├   ├─ 主题信息

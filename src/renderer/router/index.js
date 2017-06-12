@@ -26,6 +26,16 @@ export default new Router({
       component: require('@/components/ThemeManager/ThemeView')
     },
     {
+      path: '/performance',
+      name: 'performance',
+      component: require('@/components/Performance')
+    },
+    {
+      path: '/controlBoard',
+      name: 'controlBoard',
+      component: require('@/components/ControlBoard')
+    },
+    {
       path: '*',
       redirect: '/'
     }

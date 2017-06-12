@@ -22,9 +22,9 @@ const winURL = process.env.NODE_ENV === 'development'
 function createWindow () {
 
   mainWindow = new BrowserWindow({
-    height: 750,
+    height: 670,
     useContentSize: true,
-    width: 1050,
+    width: 1000,
     backgroundColor: '#373D41'
   })
 

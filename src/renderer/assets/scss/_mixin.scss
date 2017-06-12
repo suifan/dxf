@@ -1,0 +1,13 @@
+// 不定高度的垂直居中
+.vertical-middle {
+    position: relative;
+    display: block;
+    top: 50%;
+    transform: translateY(-50%)
+}
+//动画
+@mixin keyframes($animationName) {
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
