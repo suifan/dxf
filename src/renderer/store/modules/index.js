@@ -1,6 +1,6 @@
 /**
- * The file enables `@/store/index.js` to import all vuex modules
- * in a one-shot manner. There should not be any reason to edit this file.
+ * store/moudles下面的所有.js（index除外）文件内容导入到modules对象中，
+ * 并分配文件名称作为键名，vuex.modules = modules
  */
 
 const files = require.context('.', false, /\.js$/)

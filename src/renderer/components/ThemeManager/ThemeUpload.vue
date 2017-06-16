@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="themeUpload">
-      <div>
+      <div> 
         <span for="" class="label-title">文件选择:&nbsp;</span>
         <div class="input-group width">
           <input id="Info" type="text" class="ip-group" readonly placeholder="文件信息，不可编辑">
@@ -107,7 +107,7 @@
         if (file.length === 1) {
           if (file[0].type.indexOf('zip') === -1) {
             //错误信息发送至store
-            this.$store.dispatch('pushInfo',{
+            this.$store.dispatch('pushIMsg',{
               stateCode: 1,
               stateType: 'error',
               stateMsg: '请选择以zip为后缀的文件!'
@@ -117,7 +117,7 @@
             return true
           }
         }else {
-          this.$store.dispatch('pushInfo',{
+          this.$store.dispatch('pushIMsg',{
             stateCode: 1,
             stateType: 'error',
             stateMsg: '一次只能选择一个压缩包上传!'
@@ -141,9 +141,15 @@
               fileName = document.createElement('span'),
               fileSize = document.createElement('span'),
               filePath = document.createElement('span')
+          let size = Math.round(file[0].size/1024)
+          if (size > 1024) {
+            size = Math.round(file[0].size/1024/1024) + 'MB'
+          }else {
+            size += 'KB'
+          }
           fileIcon.src = '../../../../static/zip.png'
           fileName.innerHTML = '&nbsp;&nbsp;' + file[0].name + '&nbsp;&nbsp;&nbsp;'
-          fileSize.innerHTML = Math.round(file[0].size/1024) + 'k&nbsp;&nbsp;&nbsp;' 
+          fileSize.innerHTML = size + '&nbsp;&nbsp;&nbsp;' 
           filePath.innerText = file[0].path
           fileInfo.appendChild(fileIcon)
           fileInfo.appendChild(fileName)
@@ -159,15 +165,15 @@
         let themeName = document.getElementById('themeName'), //主题名称
             describe = document.getElementById('describe') //主题描述
         if (this.filelist === '') {
-          this.$store.dispatch('pushInfo',{
+          this.$store.dispatch('pushIMsg',{
             stateCode: 0,
             stateType: 'warning',
             stateMsg: '请选择文件!'
           })
-        }else if (this.inspectFile(this.filelist)) {
+        }else if (!this.inspectFile(this.filelist)) {
           return false
         }else if (themeName.value === ''||describe.value === '') {
-          this.$store.dispatch('pushInfo',{
+          this.$store.dispatch('pushIMsg',{
             stateCode: 0,
             stateType: 'warning',
             stateMsg: '输入框不能为空!'

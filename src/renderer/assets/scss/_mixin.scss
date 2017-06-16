@@ -5,9 +5,47 @@
     top: 50%;
     transform: translateY(-50%)
 }
+.none {
+    display: none;
+}
+.transparent {
+    opacity: 0;
+}
+
+//颜色
+.green {
+    color: green;
+}
+
 //动画
 @mixin keyframes($animationName) {
     @keyframes #{$animationName} {
         @content;
     }
+}
+
+.hidden { //隐藏
+  animation: hidden 1.5s ease; 
+  animation-fill-mode: forwards;
+  @include keyframes(hidden) {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0; 
+    }
+  } 
+}
+
+.show { //显示
+  animation: show 1.5s ease; 
+  animation-fill-mode: forwards;
+  @include keyframes(show) {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1; 
+    }
+  } 
 }

@@ -10,6 +10,10 @@
       <div class="nav">
         <!-- 信息栏：显示系统／其他的一些信息 -->
         <div class="infoBar" id="infoBar">
+          <!-- 即时信息 -->
+          <div id="imsg" class=""></div>
+          <!-- 长久信息 -->
+          <div id="ltmsg">在线时长</div>
         </div>
         <!-- 右侧的信息、设置、头像-->
         <div class="setting">
@@ -75,48 +79,50 @@ export default {
   },
   methods: {
     //创建信息栏infobar上的即时信息
-    createBarMsg (state) {
+    createIMsg (state) {
       let BarMsg = document.createElement('span'),
           progress = document.createElement('div'),
           progressBar = document.createElement('div'),
-          infoBar =document.getElementById('infoBar') 
+          imsg = document.getElementById('imsg') 
       switch (state.stateCode) {
         case 0:
-          BarMsg.className = 'iconfont icon-warning infobar-warning infobar-leave'
+          BarMsg.className = 'iconfont icon-warning ib-imsg-warning ib-imsg-active-leave'
           BarMsg.id = 'warning'
-          BarMsg.innerHTML = '警告：' + state.stateMsg
-          infoBar.appendChild(BarMsg)
+          BarMsg.innerHTML = '：' + state.stateMsg
+          imsg.appendChild(BarMsg)
           break;
         case 1:
-          BarMsg.className = 'iconfont icon-error infobar-error infobar-leave'
+          BarMsg.className = 'iconfont icon-error ib-imsg-error ib-imsg-active-leave'
           BarMsg.id = 'error'
-          BarMsg.innerHTML = '错误：' + state.stateMsg
-          infoBar.appendChild(BarMsg)
+          BarMsg.innerHTML = '：' + state.stateMsg
+          imsg.appendChild(BarMsg)
           break;
         case 2:
-          BarMsg.className = 'iconfont icon-success infobar-success infobar-leave'
+          BarMsg.className = 'iconfont icon-success ib-imsg-success ib-imsg-active-leave'
           BarMsg.id = 'success'
-          BarMsg.innerHTML = '成功：' + state.stateMsg
-          infoBar.appendChild(BarMsg)
+          BarMsg.innerHTML = '：' + state.stateMsg
+          imsg.appendChild(BarMsg)
           break; 
         case 3:
-          progress.className = 'infobar-progress'
-          progressBar.className = 'infobar-progress-font progress-bar progress-bar-striped active'
+          progress.className = 'ib-imsg-progress'
+          progressBar.className = 'ib-imsg-progress-font progress-bar progress-bar-striped active'
           progressBar.innerHTML = state.stateMsg
           progressBar.style.width = state.stateMsg
           progress.appendChild(progressBar)
-          infoBar.appendChild(progress)
-          break; 
-           
+          imsg.appendChild(progress)
+          break;    
       }
-      
     },
     //清除信息栏的即时信息
-    clearInfoBar () {
-      let infoBar =document.getElementById('infoBar') 
-      setTimeout(() => {
-        infoBar.removeChild(infoBar.childNodes[0])
-      },2300)
+    clearIMsg (state) {
+      let imsg = document.getElementById('imsg') 
+      let imsg_id = document.getElementById(state.stateType)
+      if (imsg_id) {
+        setTimeout(() => {
+          imsg.removeChild(imsg_id)
+          this.$store.dispatch('pushIMsg', '')
+        },2300)
+      }
     },
     
   },
@@ -125,9 +131,10 @@ export default {
   updated () {
     let state = this.$store.state
     if (this.baseURI === this.$el.baseURI) {
+      console.log(state.InfoBar.info.imsg)
       //路径对比,路由跳转的时候会改变路径
-        this.createBarMsg(state.InfoBar.info)
-        this.clearInfoBar() 
+        this.createIMsg(state.InfoBar.info.imsg)
+        this.clearIMsg(state.InfoBar.info.imsg) 
     }
     this.baseURI = this.$el.baseURI
   }
@@ -135,7 +142,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import './assets/font/iconfont.css';
 @import './assets/scss/app.scss';
 #app {
   width: 100%;
@@ -167,6 +173,18 @@ nav {
       height: 44px;
       text-align: center;
       line-height: (44/16);
+      div {
+        height: 100%;
+      }
+      #imsg {
+        position: relative;
+      }
+      #ltmsg {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        color: #fff;
+      }
     }
     .setting {
       flex: 2;
@@ -227,59 +245,10 @@ nav {
 
 .main {
   position: relative;
-  left: 52px;
   width: calc(100% - 52px);
   height: calc(100% - 44px);
-  background-color: #EFEFEF;
-}
-
-.infobar-progress {
-  display: inline-block;
-  width: 70%;
-  height: 10px;
-  overflow: hidden;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-}
-.infobar-progress-bar {
-  float: left;
-  width: 0;
-  height: 100%;
-  font-size: 10px;
-  line-height: 10px;
-  color: #fff;
-  text-align: center;
-  background-color: #337ab7;
-  box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
-  transition: width .6s ease;
-}
-.infobar-progress-font {
-  font-size: 10px;
-  line-height: 10px;
-}
-.infobar-warning {
-  display: block;
-  color: #e08017;
-}
-.infobar-error {
-  display: block;
-  color: #D32E50;
-}
-.infobar-success {
-  display: block;
-  color: #2da754;
-}
-.infobar-leave {
-  animation: leave 1s 1.5s ease; 
-  @include keyframes(leave) {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(-44px);
-      opacity: 0; 
-    }
-  } 
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #f1f2f7;
 }
 </style>

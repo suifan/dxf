@@ -1,17 +1,26 @@
 //0:警告，1:错误，2:成功
 const state = {
-  info: ''
+  info: {
+    imsg: '',
+    ltmsg: ''
+  }
 }
 
 const mutations = {
-  pushInfo (state, msg) {
-    state.info = msg
+  pushIMsg (state, msg) {
+    state.info.imsg = msg
+  },
+  pushLongTimeMsg (state, msg) {
+    state.info.ltmsg = msg
   }
 }
 
 const actions = {
-  pushInfo ({ commit }, msg) {
-    commit('pushInfo', msg)
+  pushIMsg ({ commit }, msg) {
+    commit('pushIMsg', msg)
+  },
+  pushLongTimeMsg ({ commit }, msg) {
+    commit('pushLongTimeMsg', msg)
   }
 }
 
