@@ -11,28 +11,28 @@ export default new Router({
       component: require('@/components/Home')
     },
     {
-      path: '/TM/themeInfo',
+      path: '/TM/ThemeInfo',
       name: 'ThemeInfo',
       component: require('@/components/ThemeManager/ThemeInfo')
     },
     {
-      path: '/TM/themeUpload',
+      path: '/TM/ThemeUpload',
       name: 'ThemeUpload',
       component: require('@/components/ThemeManager/ThemeUpload')
     },
     {
-      path: '/TM/themeView',
-      name: 'ThemeView',
-      component: require('@/components/ThemeManager/ThemeView')
+      path: '/DeviceMonitor',
+      name: 'DeviceMonitor',
+      component: require('@/components/DeviceMonitor')
     },
     {
-      path: '/performance',
-      name: 'performance',
+      path: '/Performance',
+      name: 'Performance',
       component: require('@/components/Performance')
     },
     {
-      path: '/controlBoard',
-      name: 'controlBoard',
+      path: '/ControlBoard',
+      name: 'ControlBoard',
       component: require('@/components/ControlBoard')
     },
     {

@@ -1,7 +1,7 @@
 // 不定高度的垂直居中
 .vertical-middle {
     position: relative;
-    display: block;
+    display: block!important;
     top: 50%;
     transform: translateY(-50%)
 }
@@ -12,10 +12,7 @@
     opacity: 0;
 }
 
-//颜色
-.green {
-    color: green;
-}
+
 
 //动画
 @mixin keyframes($animationName) {

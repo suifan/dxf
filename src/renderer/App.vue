@@ -36,28 +36,28 @@
           <span class="iconfont icon-menu bule"></span>
         </li>
         <li>
-          <router-link to="/TM/themeUpload" active-class="link-active">
+          <router-link to="/TM/ThemeUpload" active-class="link-active">
             <span class="iconfont icon-upload" title="主题上传"></span>
           </router-link>
         </li>
         <li>
-          <router-link to="/TM/themeInfo" active-class="link-active">
+          <router-link to="/TM/ThemeInfo" active-class="link-active">
             <span class="iconfont icon-manager" title="主题信息"></span>
           </router-link>
         </li>
         <li>
-          <router-link to="/TM/themeView" active-class="link-active">
-            <span class="iconfont icon-view" title="主题视图"></span>
+          <router-link to="/DeviceMonitor" active-class="link-active">
+            <span class="iconfont icon-view" title="设备监控"></span>
           </router-link>  
         </li>
         <li>
-          <router-link to="/performance" active-class="link-active">
-            <span class="iconfont icon-watch" title="性能监测"></span>
+          <router-link to="/Performance" active-class="link-active">
+            <span class="iconfont icon-import" title="数据导入"></span>
           </router-link>  
         </li>
         <li>
-          <router-link to="/controlBoard" active-class="link-active">
-            <span class="iconfont icon-phone" title="控制台"></span>
+          <router-link to="/ControlBoard" active-class="link-active">
+            <span class="iconfont icon-update" title="数据修改"></span>
           </router-link>  
         </li>
       </ul>
@@ -131,7 +131,6 @@ export default {
   updated () {
     let state = this.$store.state
     if (this.baseURI === this.$el.baseURI) {
-      console.log(state.InfoBar.info.imsg)
       //路径对比,路由跳转的时候会改变路径
         this.createIMsg(state.InfoBar.info.imsg)
         this.clearIMsg(state.InfoBar.info.imsg) 

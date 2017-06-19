@@ -1,4 +1,4 @@
-@import './_mixin';//导入混合宏
+@import 'mixin';//导入混合宏
 @import './assets/font/iconfont.css'; //导入字体样式
 
 
@@ -51,6 +51,8 @@ input, button, textarea { outline: none; }
 /** 去掉label的margin-bttom **/
 label { margin-bottom: 0;}
 
+/** 禁止拉伸 **/
+textarea { resize:none }
 /**
 *  消息栏InfoBar的样式，统一前缀：ib-
 *  即时消息（ImmediateMsg）统一前缀：ib-imsg-
