@@ -1,10 +1,14 @@
 <template>
   <div id="app">
+    <!--token: 04c1bbb660650da6fb970b46b66aa973e6774959-->
+    <!--gistID: 70fc2d799d4e0bfb499919c3875c2843-->
     <div id="info-op0">{{ this.$store.state.InfoBar.info }}</div>
     <nav>
       <!-- 控制中心 -->
       <div class="center">
-        <span class="iconfont icon-voice vertical-middle"></span>
+        <router-link to="/Home" active-class="link-active">
+          <span class="iconfont icon-voice "></span>
+        </router-link>
       </div>
       <!-- 导航栏 -->
       <div class="nav">
@@ -13,7 +17,7 @@
           <!-- 即时信息 -->
           <div id="imsg" class=""></div>
           <!-- 长久信息 -->
-          <div id="ltmsg">在线时长</div>
+          <div id="ltmsg"></div>
         </div>
         <!-- 右侧的信息、设置、头像-->
         <div class="setting">
@@ -47,7 +51,7 @@
         </li>
         <li>
           <router-link to="/DeviceMonitor" active-class="link-active">
-            <span class="iconfont icon-view" title="设备监控"></span>
+            <span class="iconfont icon-watch" title="设备监控"></span>
           </router-link>  
         </li>
         <li>
@@ -156,10 +160,15 @@ nav {
     height: inherit;
     float: left;
     background-color: #01A6EF;
-    color: #F3F3F3;
     text-align: center;
     span {
+      color: #ffffff;
       font-size: 1.4rem;
+      line-height: 44px;
+    }
+    a {
+      text-decoration: none;
+      outline: none;
     }
   }
   .nav {

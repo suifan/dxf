@@ -35,6 +35,7 @@ ul, ol { list-style: none; }
 /** 重置文本格式元素 **/
 a { text-decoration: none; }
 a:hover { text-decoration: none; }
+a:active { text-decoration: none; }
 
 /** 重置表单元素 **/
 legend { color: #000; } /* for ie6 */

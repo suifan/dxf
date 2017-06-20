@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import axios from 'axios'
 import _ from 'lodash'
+import Element from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import App from './App'
@@ -11,10 +13,19 @@ if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
+Vue.use(Element)
 /* eslint-disable no-new */
 new Vue({
   components: { App },
   router,
   store,
-  template: '<App/>'
+  template: '<App/>',
+  data () {
+    return {
+      loading: false
+    }
+  },
+  mounted() {
+    this.loading = true
+  }
 }).$mount('#app')

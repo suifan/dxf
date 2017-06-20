@@ -111,7 +111,11 @@ let rendererConfig = {
         : false
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.ProvidePlugin({
+      _: 'lodash',
+      echarts: 'echarts'
+    }),
   ],
   output: {
     filename: '[name].js',

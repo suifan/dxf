@@ -16,19 +16,19 @@
             <td>序号</td>
             <td>主机ip</td>
             <td>备注</td>
+            <td>操作系统</td> 
             <td>设备状态</td>
             <td>通信连接</td>
-            <td>在线时长</td>
-            <td>占用内存</td> 
+            <td>内存优化</td>
           </tr>
           <tr>
             <td>1</td>
             <td>192.168.0.104</td>
             <td>前台大屏</td>
+            <td>window 10</td>
             <td>在线</td>
             <td>已连接</td>
-            <td>10h</td>
-            <td>340M</td>
+            <td><span>优化</span></td>
           </tr>
         </tbody>
       </table>
@@ -124,22 +124,14 @@
 </template>
 
 <script>
-  var os = require('os');
-  var IPv4, hostName;
-  hostName = os.hostname();
-  for (var i = 0; i < os.networkInterfaces().en0.length; i++) {
-    if (os.networkInterfaces().en0[i].family == 'IPv4') {
-      IPv4 = os.networkInterfaces().en0[i].address;
-    }
-  }
-  let a = {
-    localIP: "127.0.0.1", 
-    remark: "前台大屏",
-    runTheme: [
-      {img: '', name: '集团信息'}
-    ],
-    theme: []
-  }
+  // var os = require('os');
+  // var IPv4, hostName;
+  // hostName = os.hostname();
+  // for (var i = 0; i < os.networkInterfaces().en0.length; i++) {
+  //   if (os.networkInterfaces().en0[i].family == 'IPv4') {
+  //     IPv4 = os.networkInterfaces().en0[i].address;
+  //   }
+  // }
   export default {
     data () {
       return {

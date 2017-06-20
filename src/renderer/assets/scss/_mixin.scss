@@ -46,3 +46,56 @@
     }
   } 
 }
+
+.showPage { //显示
+  animation: showPage 1s ease; 
+  animation-fill-mode: forwards;
+  @include keyframes(showPage) {
+    from {
+      opacity: 1;
+      right: -180px;
+    }
+    to {
+      opacity: 1; 
+      right: 0;
+    }
+  } 
+}
+.closePage { //显示
+  animation: closePage 1s ease; 
+  animation-fill-mode: forwards;
+  @include keyframes(closePage) {
+    from {
+      opacity: 1;
+      right: 0;
+    }
+    to {
+      opacity: 1; 
+      right: -180px;
+    }
+  } 
+}
+.toggleIcon { //显示
+  animation: toggleIcon 1s ease; 
+  animation-fill-mode: forwards;
+  @include keyframes(toggleIcon) {
+    from {
+      right: 0;
+    }
+    to {
+      right: 180px;
+    }
+  } 
+}
+.toggleRightIcon { //显示
+  animation: toggleRightIcon 1s ease; 
+  animation-fill-mode: forwards;
+  @include keyframes(toggleRightIcon) {
+    from {
+      right: 180px;
+    }
+    to {
+      right: 0;
+    }
+  } 
+}
