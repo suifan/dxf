@@ -72,8 +72,8 @@
       <router-view></router-view>
     </div>
   </div>
-  <div v-else id="app" onselectstart="return false">
-    <div class="titleBar"></div>
+  <div v-else id="app" onselectstart="return true">
+    <titleBar></titleBar>
     <div class="mainLogin">
       <router-view></router-view>
     </div>
@@ -83,12 +83,21 @@
 <script>
 const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
+import titleBar from './components/titleBar'
+// if (os.platform() === 'darwin') {
+//   isMac = true
+// }else {
+//   isMac = false
+// }
 export default {
   name: 'app',
   data () {
     return {
       baseURI: '', //存储组件的路径
     }
+  },
+  components : {
+    titleBar
   },
   methods: {
     //创建信息栏infobar上的即时信息
@@ -167,21 +176,14 @@ export default {
   width: 100%;
   height: 100%;
 }
-.titleBar {
-  width: 100%;
-  height: 22px;
-  line-height: 22px;
-  color: rgb(157, 165, 180);
-  background-color: rgb(33, 37, 43);
-  font-size: 12px;
-}
+
 .mainLogin {
   position: absolute;
-  top: 22px;
+  top: 28px;
   left: 0px;
   bottom: 0px;
   width: 100%;
-  height: calc(100% - 22px);
+  height: calc(100% - 28px);
   background-color: rgb(51, 56, 66);
 }
 #info-op0 {

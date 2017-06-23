@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow
 let contents
-let isMac
+let isMac 
 if (os.platform() === 'darwin') {
   isMac = true
 }else {
@@ -68,8 +68,23 @@ app.on('activate', () => {
 /**
  * 主进程---渲染进程 通信
  */
-
-
+//EXIT
+ipcMain.on('window-all-closed', () => {
+  console.log('sssss')
+  app.quit()
+})
+// minimize
+ipcMain.on('minimize', () => {
+  mainWindow.minimize()
+})
+// maximize
+ipcMain.on('maximize', () => {
+  mainWindow.maximize()
+})
+// unmaximize
+ipcMain.on('unmaximize', () => {
+  mainWindow.unmaximize()
+})
 
 /**
  * Auto Updater

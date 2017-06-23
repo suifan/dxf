@@ -23,6 +23,7 @@
 <script>
   const remote = require('electron').remote;
   const BrowserWindow = remote.BrowserWindow;
+  let ipcRenderer = require('electron').ipcRenderer
   const os = require('os')
   export default {
     name: 'login',
