@@ -4,7 +4,7 @@
     <!-- 大屏终端 -->
     <!-- 控制终端 -->
     <div class="flex-container">
-      <div class="item" @click="clickChart('1')" style="transform: translate(-26%, 80%) scale(.48)">
+      <div class="item" @click="clickPanel('1')" style="transform: translate(-26%, 80%) scale(.48)">
         <span class="title bg-green">控制终端</span>
         <div v-if="goSeeControlDetails" class="menu">
           <ul>
@@ -27,8 +27,8 @@
             </div>
           </div>
           <div v-else class="device">
-            <ul v-if="isControl" class="Device-list">
-              <template v-for="list in controlList">
+            <ul v-if="this.$store.getters.isControlDevice" class="Device-list">
+              <template v-for="list in this.$store.state.Device.controlList">
                 <li>
                   <span class="iconfont icon-ipad"></span>
                   &nbsp;{{ list.remark ? list.remark : list.localIP }}
@@ -43,12 +43,12 @@
           </div>
         </div>
       </div>
-      <div class="item" @click="clickChart('2')" style="transform: translate(26%, 80%) scale(.48)">
+      <div class="item" @click="clickPanel('2')" style="transform: translate(26%, 80%) scale(.48)">
         <span class="title bg-screen">大屏终端</span>
         <div v-if="goSeeDetails" class="menu">
           <ul>
-            <li :class="{active: isDeviceActive}" @click="localDeviceActive($event)">上线详情</li>
-            <li :class="{active: !isDeviceActive}" @click="localDeviceActive($event)">内存</li>
+            <li :class="{active: isDeviceActive}" @click="DeviceToggleActive($event)">上线详情</li>
+            <li :class="{active: !isDeviceActive}" @click="DeviceToggleActive($event)">内存</li>
           </ul>
         </div>
         <div class="content">
@@ -77,24 +77,25 @@
             </div>
           </div>
           <div v-else class="device">
-            <ul v-if="isDevice" class="Device-list">
-              <template v-for="list in hostList">
+            <div v-if="this.$store.getters.isScreenDevice" class="NotDevice">
+              没有连接的设备
+            </div>
+            <ul v-else class="Device-list">
+              <template v-for="list in this.$store.state.Device.maxScreenList">
                 <li>
                   <span class="iconfont icon-mac"></span>
-                  
                   {{ list.remark ? list.remark : list.localIP }}
                   &nbsp;&nbsp;&nbsp;<el-button @click="seeDetails()">查看详情</el-button>
-                  <el-button type="primary" :loading="true">连接</el-button>
+                  <el-button v-if="list.connect" type="success">{{ list.deviceState }}</el-button>
+                  <el-button v-else type="danger">{{ list.deviceState }}</el-button>
                 </li>
               </template>
             </ul>
-            <div v-else class="NotDevice">
-              没有连接的设备
-            </div>
+            
           </div>
         </div>
       </div>
-      <div class="item activing" @click="clickChart('3')" style="transform: translate(0, 0) scale(1)">
+      <div class="item activing" @click="clickPanel(3)" style="transform: translate(0, 0) scale(1)">
         <span class="title">本机状态</span>
         <div class="menu">
           <ul>
@@ -138,23 +139,13 @@
     name: 'Home',
     data() {
       return {
-        items: [],
-        myChart: {},
-        localToggle: true,
-        deviceToggle: true,
-        isLocalActive: true,
-        isDeviceActive: true,
-        isDevice: true,
-        isControl: true,
-        hostList: [
-          {localIP: "127.0.0.1", remark: "前台大屏"},
-          {localIP: "127.0.0.100", remark: "董事长电脑"}
-        ],
-        controlList: [
-          {localIP: "127.0.0.100", remark: ""}
-        ],
-        goSeeDetails: false,
-        goSeeControlDetails: false
+        items: [],  //面板切换的列表
+        localToggle: true,    //本机状态导航栏切换
+        deviceToggle: true,   //大屏终端导航栏切换
+        isLocalActive: true,  //本机状态导航栏激活状态
+        isDeviceActive: true, //大屏终端导航栏激活状态 
+        goSeeDetails: false,  //查看大屏终端的详情
+        goSeeControlDetails: false  //查看控制终端详情
       }
     },
     components: {
@@ -163,22 +154,23 @@
       'ec-pie': pie
     },
     mounted() {
-      
-      this._init()
+      this.getItems()
     },
     methods: {
-      // _resize() {
-      //   this.$root.charts.forEach((myChart) => {
-      //     myChart.resize()
-      //   })
-      // },
-      _init() {
+      /**
+       * 获取面板列表，并给每个item设置order
+       **/
+      getItems() {
         this.items = document.querySelectorAll('.flex-container .item')
         for (let i = 0; i < this.items.length; i++) {
           this.items[i].dataset.order = i + 1;
         }
       },
-      clickChart(clickIndex) {
+      /**
+       * 点击面板进行切换查看,点击自己不做动作
+       * @params  clickIndex: 面板的标号
+       **/
+      clickPanel(clickIndex) {
         let activeItem = document.querySelector('.flex-container .activing')
         let activeIndex = activeItem.dataset.order
         let clickItem = this.items[clickIndex - 1]
@@ -187,14 +179,23 @@
         }
         activeItem.classList.remove('activing')
         clickItem.classList.add('activing')
-        this._setStyle(clickItem, activeItem)
+        this.setStyle(clickItem, activeItem)
       },
-      _setStyle(el1, el2) {
+      /**
+       * 激活面板与点击面板切换样式
+       * @params  el1: 已激活的面板
+       * @params  el2: 点击的面板
+       **/
+      setStyle(el1, el2) {
         let transform1 = el1.style.transform
         let transform2 = el2.style.transform
         el1.style.transform = transform2
         el2.style.transform = transform1
       },
+      /**
+       * 本机切换激活样式
+       * @params  e: 当前元素
+       **/
       localToggleActive (e) {
         if (e.target.innerHTML === '内存') {
           this.isLocalActive = false
@@ -205,7 +206,11 @@
           this.localToggle = true 
         }
       },
-      localDeviceActive (e) {
+      /**
+       * 大屏终端切换激活样式
+       * @params  e: 当前元素
+       **/
+      DeviceToggleActive (e) {
         if (e.target.innerHTML === '内存') {
           this.isDeviceActive = false
           this.deviceToggle = false
@@ -215,15 +220,27 @@
           this.deviceToggle = true 
         }
       },
+      /**
+       * 查看大屏终端详情
+       **/
       seeDetails () {
         this.goSeeDetails = true
       },
+      /**
+       * 查看控制终端详情
+       **/
       seeControlDetails () {
         this.goSeeControlDetails = true
       },
+      /**
+       * 切换大屏终端详情
+       **/
       toggleDetails () {
         this.goSeeDetails = false
       },
+      /**
+       * 切换大屏终端详情
+       **/
       toggleControlDetails () {
         this.goSeeControlDetails = false
       }
@@ -288,6 +305,10 @@
         .content {
           position: relative;
           height: calc(100% - 25px - 52px);
+          .NotDevice {
+            height: 100%;
+            line-height: 20
+          }
           .online {
             width: 100%;
             height: 100%;

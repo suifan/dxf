@@ -7,7 +7,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      // redirect: '/Home',
       name: 'Home',
+      meta: {
+        requireAuth: true
+      },
       component: require('@/components/Home')
     },
     {
@@ -26,14 +30,19 @@ export default new Router({
       component: require('@/components/DeviceMonitor')
     },
     {
-      path: '/Performance',
-      name: 'Performance',
-      component: require('@/components/Performance')
+      path: '/DataImport',
+      name: 'DataImport',
+      component: require('@/components/dataImport')
     },
     {
-      path: '/ControlBoard',
-      name: 'ControlBoard',
-      component: require('@/components/ControlBoard')
+      path: '/DataUpdate',
+      name: 'DataUpdate',
+      component: require('@/components/dataImport')
+    },
+    {
+      path: '/Login',
+      name: 'Login',
+      component: require('@/components/login')
     },
     {
       path: '*',

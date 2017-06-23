@@ -4,6 +4,8 @@
 </template>
 
 <script>
+  let os = require('os')
+  
   export default {
     props: ['id'],
     data() {
@@ -12,6 +14,7 @@
       }
     },
     mounted() {
+      let that = this
       this.myChart = echarts.init(document.getElementById(this.id))
       let option = {
         color: ['#3398DB'],
@@ -54,6 +57,17 @@
         }]
       }
       this.myChart.setOption(option)
+      
+      setInterval(function() {
+        let free = os.freemem() / (1024 * 1024 * 1024) ,
+            total = os.totalmem() / (1024 * 1024 * 1024)
+        that.myChart.setOption({
+          series: [{
+            name: 'GB',
+            data: [total.toFixed(0), free.toFixed(0)]
+          }]
+        })
+      }, 1000)
     }
   }
 </script>

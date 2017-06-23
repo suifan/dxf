@@ -1,12 +1,12 @@
 <template>
-  <div id="app">
+  <div v-if="this.$store.state.User.loginState" id="app">
     <!--token: 04c1bbb660650da6fb970b46b66aa973e6774959-->
     <!--gistID: 70fc2d799d4e0bfb499919c3875c2843-->
     <div id="info-op0">{{ this.$store.state.InfoBar.info }}</div>
     <nav>
       <!-- 控制中心 -->
       <div class="center">
-        <router-link to="/Home" active-class="link-active">
+        <router-link to="/" active-class="link-active">
           <span class="iconfont icon-voice "></span>
         </router-link>
       </div>
@@ -28,7 +28,7 @@
             <span class="iconfont icon-setting vertical-middle"></span>
           </div>
           <div class="user">
-            <span class="glyphicon glyphicon-user vertical-middle"></span>
+            <span @click="signOut" class="glyphicon glyphicon-user vertical-middle"></span>
           </div>
         </div>
       </div>
@@ -55,12 +55,12 @@
           </router-link>  
         </li>
         <li>
-          <router-link to="/Performance" active-class="link-active">
+          <router-link to="/DataImport" active-class="link-active">
             <span class="iconfont icon-import" title="数据导入"></span>
           </router-link>  
         </li>
         <li>
-          <router-link to="/ControlBoard" active-class="link-active">
+          <router-link to="/DataUpdate" active-class="link-active">
             <span class="iconfont icon-update" title="数据修改"></span>
           </router-link>  
         </li>
@@ -71,14 +71,19 @@
       <router-view></router-view>
     </div>
   </div>
+  <div v-else id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
+const remote = require('electron').remote;
+  const BrowserWindow = remote.BrowserWindow;
 export default {
   name: 'app',
   data () {
     return {
-      baseURI: '' //存储组件的路径
+      baseURI: '', //存储组件的路径
     }
   },
   methods: {
@@ -128,9 +133,16 @@ export default {
         },2300)
       }
     },
-    
+    signOut () {
+      this.$store.dispatch('signOut')
+      BrowserWindow.win.setSize(800, 622)
+      BrowserWindow.win.center()
+      this.$router.push('Login')
+
+    }
   },
   mounted () {
+    
   },
   updated () {
     let state = this.$store.state

@@ -14,7 +14,21 @@ Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 Vue.use(Element)
-/* eslint-disable no-new */
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    if (!store.state.User.User) {
+      next ({
+        path: '/Login'
+      })
+    }else {
+      next()
+    }
+  }else {
+    next()
+  }
+})
+
 new Vue({
   components: { App },
   router,
@@ -22,10 +36,9 @@ new Vue({
   template: '<App/>',
   data () {
     return {
-      loading: false
+      
     }
   },
   mounted() {
-    this.loading = true
   }
 }).$mount('#app')

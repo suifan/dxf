@@ -2,10 +2,12 @@
   <div class="themeInfo">
     <div class="box">
       <div class="top">
+        <!--../../assets/img/theme.png-->
         <img src="../../assets/img/theme.png" width="" alt="">
       </div>
       <div class="bottom">
-        <span class="vertical-middle">主题创建于2017-5-10</span>
+        <span v-if="isTheme" class="vertical-middle">还未上传主题</span>
+        <span v-else class="vertical-middle">主题上传于{{ defaultTheme.uploadTime }}</span>
       </div>
     </div>
     <div class="scene">
@@ -13,37 +15,17 @@
       <span class="iconfont icon-finish transparent" id="finish" @click="finish()"></span>
       <div>
         <span>主题名称:&nbsp;</span>
-        <input type="text" class="ip-text ip-text-default" id="themeName" readonly value="集团信息">
+        <input type="text" class="ip-text ip-text-default" id="themeName" readonly :value="defaultTheme.name">
       </div>
-      <div>
-        <span>场景名称:&nbsp;</span>
-        <input type="text" class="ip-text ip-text-default" id="sceneName" readonly value="企业大学">
-      </div>
-      <!--<div>
-          <span>屏幕分辨率:&nbsp;</span>
-          <input type="text" class="ip-text" id="horizontal"> 
-          <b>✖️</b>
-          <input type="text" class="ip-text" id="vertical">
-        </div>
-        <div>
-          <span>屏幕比例:&nbsp;</span>
-          <input type="text" class="ip-text" id="width"> 
-          <b>✖️</b>
-          <input type="text" class="ip-text" id="height">
-        </div>-->
       <div>
         <span style="vertical-align: top; display: inline-block">主题描述:&nbsp;</span>
-        <textarea name="" id="describe" class="ip-text-default" readonly cols="30" rows="5">顺鑫控股集团的企业大学展厅里的第二个主题，集团信息主题，涵盖了集团，集团事业部的营收、利润，股票行情</textarea>
+        <textarea name="" id="describe" class="ip-text-default" readonly cols="30" rows="6">{{ defaultTheme.describe }}</textarea>
       </div>
     </div>
-    <!-- 上传时间、名称 -->
-    <!--场景、描述-->
-    <!--分辨率、屏幕比例-->
-    <!-- 是否在线、主题占用内存、页面加载时长、运行时长-->
     <div class="timeLine">
-      <p>{{ defaultIP }}下主题运行时间线</p>
-      <div v-if="noconn" class="noconn">
-        设备没有连接通信
+      <p>主题运行时间线</p>
+      <div v-if="noRunTheme" class="noRunTheme">
+        大屏终端没有运行主题
       </div>
       <div v-else class="stateLine">
         <article class="timeline-item">
@@ -99,8 +81,8 @@
     </div>
   
     <div class="timer">
-      <div v-if="noconn" class="noconn">
-        设备没有连接通信
+      <div v-if="noRunTheme" class="noRunTheme">
+        大屏终端没有运行主题
       </div>
       <div v-else>
         <p>Dom加载完成：330ms </p>
@@ -111,33 +93,35 @@
     <div class="performance">
       <div class="top">
         <span class="online">
-            <label class="circle"></label>
-            <label for="">{{ defaultIP }}在线</label>
+            <label class="circle" :class="{green: this.defaultDevice.connect, red: !this.defaultDevice.connect}"></label>
+            <label for="">{{ defaultDevice.localIP }}</label>
           </span>
       </div>
       <div class="middle">
         <ul v-if="showList" class="">
-          <template v-for="list in hostList">
-            <li :class="{hostActive: defaultIP === list.localIP}">
+          <li v-if="isScreenDevice">没有设备</li>
+          <template v-else v-for="list in maxScreenList">
+            <li :class="{hostActive: defaultDevice.localIP === list.localIP}">
               <span class="iconfont icon-mac"></span>
               &nbsp;{{ list.remark ? list.remark : list.localIP }}
-              &nbsp;&nbsp;&nbsp;<el-button v-if="defaultIP != list.localIP" type="primary" size="mini" @click="toggle(list.localIP)">切换</el-button>
-              <el-button type="primary" size="mini">连接</el-button>
+              &nbsp;&nbsp;&nbsp;<el-button v-if="defaultDevice.localIP != list.localIP" type="primary" size="mini" @click="toggle('device', list)">切换</el-button>
             </li>
           </template>
         </ul>
         <ul v-else>
-          <template v-for="list in theme">
-            <li :class="{hostActive: defaultName === list.name}">
+          <li v-if="isTheme">没有主题列表，请上传主题</li>
+          <template v-else v-for="list in themeList">
+            <li :class="{hostActive: defaultTheme.name === list.name}">
+              <span class="iconfont icon-web-theme"></span>
               &nbsp;{{ list.name }}
-              &nbsp;&nbsp;&nbsp;<el-button v-if="defaultName != list.name" type="primary" size="mini">切换</el-button>
+              &nbsp;&nbsp;&nbsp;<el-button v-if="defaultTheme.name != list.name" type="primary" size="mini" @click="toggle('theme', list)">切换</el-button>
             </li>
           </template>
         </ul>
       </div>
       <div class="bottom">
-        <span class="memory" :class="{active: showList}" @click="toggleList($event)">设备列表</span>
-        <span class="cpu" :class="{active: !showList}" @click="toggleList($event)">主题列表</span>
+        <span class="memory" :class="{active: showList}" @click="toggleNav($event)">设备列表</span>
+        <span class="cpu" :class="{active: !showList}" @click="toggleNav($event)">主题列表</span>
       </div>
     </div>
   
@@ -150,53 +134,67 @@
     name: 'ThemeInfo',
     data() {
       return {
-        hostList: [{
-            localIP: "127.0.0.1",
-            remark: "前台大屏"
-          },
-          {
-            localIP: "127.0.0.100",
-            remark: "董事长电脑"
-          }
-        ],
-        theme: [
-          {img: '', name: '集团信息'}
-        ],
-        defaultIP: '127.0.0.1',
-        defaultName: '集团信息',
+        isTheme: this.$store.getters.isTheme,
+        isScreenDevice: this.$store.getters.isScreenDevice,
+        themeList: this.$store.state.Theme.themeList,
+        maxScreenList: this.$store.state.Device.maxScreenList,
+        defaultDevice: {
+          localIP: "",
+          remark: "",
+          systemOS: '',
+          deviceState: '',
+          connect: false
+        },
+        defaultTheme: {
+          imgSrc: '',
+          name: '',
+          describe: '',
+          uploadTime: ''
+        },
         showList: true,
-        noconn: false
+        noRunTheme: this.$store.state.Theme.noRunTheme
       }
     },
+    computed: {
+      
+    },
     methods: {
+      /**
+       * 修改主题信息
+       **/
       modify() {
         let themeName = document.getElementById('themeName'),
-          sceneName = document.getElementById('sceneName'),
           describe = document.getElementById('describe'),
           modify = document.getElementById('modify'),
           finish = document.getElementById('finish')
-        modify.style.color = '#D32E50'
-        finish.className = 'iconfont icon-finish transparent show'
-        themeName.removeAttribute('readonly')
-        sceneName.removeAttribute('readonly')
-        describe.removeAttribute('readonly')
-        themeName.className = 'ip-text ip-text-modify'
-        sceneName.className = 'ip-text ip-text-modify'
-        describe.className = 'ip-text-modify'
+        if (this.$store.getters.isTheme) {
+          modify.style.color = '#D32E50'
+          finish.className = 'iconfont icon-finish transparent show'
+          themeName.removeAttribute('readonly')
+          describe.removeAttribute('readonly')
+          themeName.className = 'ip-text ip-text-modify'
+          describe.className = 'ip-text-modify'
+        }else {
+          this.$store.dispatch('pushIMsg', {
+            stateCode: 0,
+            stateType: 'warning',
+            stateMsg: '请先上传主题'
+          })
+        }
       },
+      /**
+       * 完成修改
+       **/
       finish() {
         let themeName = document.getElementById('themeName'),
-          sceneName = document.getElementById('sceneName'),
           describe = document.getElementById('describe'),
           modify = document.getElementById('modify'),
           finish = document.getElementById('finish')
         modify.style.color = '#137bd6'
         finish.className = 'iconfont icon-finish transparent hidden'
         themeName.setAttribute('readonly', 'readonly')
-        sceneName.setAttribute('readonly', 'readonly')
         describe.setAttribute('readonly', 'readonly')
         themeName.className = 'ip-text ip-text-default'
-        sceneName.className = 'ip-text ip-text-default'
         describe.className = 'ip-text-default'
         this.$store.dispatch('pushIMsg', {
           stateCode: 2,
@@ -204,20 +202,30 @@
           stateMsg: '修改成功!'
         })
       },
-      toggle (ip) {
-        this.defaultIP = ip
+      /**
+       * 切换主题和设备
+       **/
+      toggle (type, data) {
+        if(type === "theme") {
+          this.defaultTheme = data
+        }else {
+          this.defaultDevice = data
+        }
       },
-      toggleList (e) {
+      /**
+       * 切换导航
+       **/
+      toggleNav (e) {
         let items = document.querySelectorAll('.performance .bottom span')
         if (e.target.innerHTML === '设备列表') {
           this.showList = true
         }else {
           this.showList = false
         }
-        
       }
-    },
-    mounted() {}
+    },  
+    mounted() {
+    }
   }
 </script>
 
@@ -331,7 +339,7 @@
         margin: 7px;
         text-align: center;
       }
-      .noconn {
+      .noRunTheme {
         width: 100%;
         height: calc(100% - 50px);
         line-height: 20;
@@ -495,7 +503,13 @@
             width: 14px;
             height: 14px;
             border-radius: 7px;
+            
+          }
+          .green {
             background-color: #26f101;
+          }
+          .red {
+            background-color: #dc3333;
           }
         }
       }
@@ -546,7 +560,7 @@
       padding: 20px;
       border-radius: 5px;
       background-color: #FFFFFF;
-      .noconn {
+      .noRunTheme {
         line-height: 10;
         text-align: center;
       }

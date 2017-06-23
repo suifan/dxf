@@ -146,8 +146,8 @@ function greeting () {
   const cols = process.stdout.columns
   let text = ''
 
-  if (cols > 104) text = 'jnoos-DVF'
-  else if (cols > 76) text = 'jnoos-DVF'
+  if (cols > 104) text = 'jnoos-dxf'
+  else if (cols > 76) text = 'jnoos-dxf'
   else text = false
 
   if (text) {

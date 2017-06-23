@@ -7,7 +7,7 @@
           <span class="iconfont icon-mac"></span> 大屏终端
         </div>
         <div class="counter">
-          设备数量: 2
+          设备数量: {{ maxScreenList.length }}
         </div>
       </div>
       <table class="table table-hover personal-task">
@@ -18,18 +18,16 @@
             <td>备注</td>
             <td>操作系统</td> 
             <td>设备状态</td>
-            <td>通信连接</td>
-            <td>内存优化</td>
           </tr>
-          <tr>
-            <td>1</td>
-            <td>192.168.0.104</td>
-            <td>前台大屏</td>
-            <td>window 10</td>
-            <td>在线</td>
-            <td>已连接</td>
-            <td><span>优化</span></td>
-          </tr>
+          <template v-for="list,index in maxScreenList">
+            <tr>
+              <td>{{ index+1 }}</td>
+              <td>{{ list.localIP }}</td>
+              <td>{{ list.remark }}</td>
+              <td>{{ list.systemOS }}</td>
+              <td>{{ list.deviceState }}</td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
@@ -40,7 +38,7 @@
           <span class="iconfont icon-ipad"></span> 控制终端
         </div>
         <div class="counter">
-          设备数量: 1
+          设备数量: {{ controlList.length }}
         </div>
       </div>
       <table class="table table-hover personal-task">
@@ -51,18 +49,18 @@
             <td>操作系统</td>
             <td>设备类型</td> 
             <td>设备状态</td>
-            <td>通信连接</td>
             <td>使用时长</td>
           </tr>
-          <tr>
-            <td>1</td>
-            <td>192.168.0.104</td>
-            <td>ios 10.0</td>
-            <td>ipad</td>
-            <td>在线</td>
-            <td>已连接</td>
-            <td>20min</td>
-          </tr>
+          <template v-for="list,index in controlList">
+            <tr>
+              <td>{{ index+1 }}</td>
+              <td>{{ list.localIP }}</td>
+              <td>{{ list.systemOS }}</td>
+              <td>{{ list.deviceType }}</td>
+              <td>{{ list.deviceState }}</td>
+              <td>{{ list.useTime }}</td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
@@ -76,8 +74,8 @@
       <div class="distribution">
         <div class="Device">
           <p class="title">设备列表</p> 
-          <ul v-if="isDevice" class="Device-list">
-            <template v-for="list in hostList">
+          <ul v-if="!isDevice" class="Device-list">
+            <template v-for="list in maxScreenList">
               <li @click="readThemeList($event, list.localIP)">{{ list.remark ? list.remark : list.localIP }}</li>
             </template>
           </ul>
@@ -92,7 +90,7 @@
             <div class="list-content" id="runtheme">
               <template v-for="item in runTheme">
                 <div @click="selectRunTheme($event, item)">
-                  <img :src="item.img" :alt="item.name" width="120">
+                  <!--<img :src="item.img" :alt="item.name" width="120">-->
                   <span>{{ item.name }}</span>
                 </div>
               </template>
@@ -107,7 +105,7 @@
             <div class="list-content" id="nowtheme">
               <template v-for="item in theme">
                 <div @click="selectNowTheme($event, item)">
-                  <img :src="item.img" :alt="item.name" width="120">
+                  <!--<img :src="item.img" :alt="item.name" width="120">-->
                   <span>{{ item.name }}</span>
                 </div>
               </template>
@@ -135,31 +133,11 @@
   export default {
     data () {
       return {
-        isDevice: true,
-        isSelectDevice: false,
-        hostList: [
-          {localIP: "127.0.0.1", remark: "前台大屏"},
-          {localIP: "127.0.0.100", remark: "董事长电脑"}
-        ],
-        themeInfo: [
-          {
-            localIP: "127.0.0.1",
-            runTheme: [
-              {img: '', name: '集团信息'},
-              {img: '', name: 'ssss'}
-            ],
-            theme: []
-          },
-          {
-            localIP: "127.0.0.100", 
-            runTheme: [],
-            theme: [
-              {img: '', name: '集团信息'},
-              {img: '', name: 'ssss'},
-              {img: '', name: 'aaaa'}
-            ]
-          }
-        ],
+        isDevice: this.$store.getters.isScreenDevice,
+        isSelectDevice: false, //是不是选择了设备
+        maxScreenList: this.$store.state.Device.maxScreenList,
+        controlList: this.$store.state.Device.controlList,
+        themeList: this.$store.state.Theme.themeList.slice(0),
         runTheme: [],
         theme: [],
         sNowTheme: [],
@@ -168,6 +146,11 @@
       }
     },
     methods: {
+      /**
+       * 读取主题列表
+       * @params  e: 当前元素
+       * @params  ip: 读取的设备IP
+       **/
       readThemeList (e, ip) {
         let children = e.target.parentNode.children
         if (e.target.className === 'select') {
@@ -183,14 +166,19 @@
             i.className = ''
           }
           e.target.className = 'select'
-          for (let i of this.themeInfo) {
+          for (let i of this.ScreenRunTheme) {
             if(ip === i.localIP) {
               this.runTheme = i.runTheme
-              this.theme = i.theme
+              this.theme = i.nowTheme
             }
           }
         }
       },
+      /**
+       * 选取现有主题列表
+       * @params  e: 当前元素
+       * @params  item: 选中的主题信息
+       **/
       selectNowTheme (e, item) {
         if (e.target.nodeName === "DIV") {
           if (e.target.className === 'selectTheme') {
@@ -210,6 +198,11 @@
           }
         }
       },
+      /**
+       * 选取运行的主题列表
+       * @params  e: 当前元素
+       * @params  item: 选中的主题信息
+       **/
       selectRunTheme (e, item) {
         if (e.target.nodeName === "DIV") {
           if (e.target.className === 'selectTheme') {
@@ -229,11 +222,14 @@
           }
         }
       },
+      /**
+       * 选中的主题导入运行主题列表内
+       **/
       importTheme () {
         let dom = document.getElementById('nowtheme')
-        for (let i of this.themeInfo) {
+        for (let i of this.ScreenRunTheme) {
           let rt = _.get(i, "runTheme"),
-              t = _.get(i, "theme")
+              t = _.get(i, "nowTheme")
           if (i.localIP === this.selectIP) {
             for(let i2 of this.sNowTheme) {
               _.remove(t, item => item.name === i2.name)
@@ -246,11 +242,14 @@
           }  
         }
       },
+      /**
+       * 选中的主题导出到现有主题中
+       **/
       exportTheme () {
         let dom = document.getElementById('runtheme')
-        for (let i of this.themeInfo) {
+        for (let i of this.ScreenRunTheme) {
           let rt = _.get(i, "runTheme"),
-              t = _.get(i, "theme")
+              t = _.get(i, "nowTheme")
           if (i.localIP === this.selectIP) {
             for(let i2 of this.sRunTheme) {
               _.remove(rt, item => item.name === i2.name)
@@ -263,6 +262,22 @@
           }  
         }
       }
+    },
+    computed: {
+      //大屏终端将药运行的主题列表
+      ScreenRunTheme () {
+        let arr = []
+        for (let i of this.maxScreenList) {
+          arr.push({
+            localIP: i.localIP,
+            runTheme: [],
+            nowTheme: this.themeList.slice(0)
+          })
+        }
+        return arr
+      }
+    },
+    mounted () {
     }
   }
 </script>

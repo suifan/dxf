@@ -3,7 +3,7 @@
     <div class="themeUpload">
       <span class="label-title">文件选择:&nbsp;</span>
       <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" 
-      multiple list-type="picture" :auto-upload="false" ref="upload">
+       list-type="picture" :auto-upload="false" ref="upload">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <!--<div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>-->
@@ -15,6 +15,7 @@
       xxx.zip(压缩包)
       ├─ xxx(文件夹)
       ├   ├─ 项目的资源文件(js/css/video/font等)
+      ├─ <code style="color: red">theme.png (主题界面的截图)</code>
       └─ <code style="color: red">index.html</code>
     ⚠️<code style="color: #e28408">注：必须遵循以上结构！一个压缩包和一张主题界面的截图!</code>    
         </pre>
@@ -37,7 +38,7 @@
     },
     methods: {
       submitUpload() {
-        this.$refs.upload.submit();
+        this.$refs.upload.submit()
       }
     },
     mounted() {}
