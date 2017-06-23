@@ -3,7 +3,7 @@
  * BrowseWindow
  * ipcMain模块可以使主进程和渲染进程之间进行异步通信
  */
-import { app, BrowserWindow, ipcMain, webContents } from 'electron'
+import { app, BrowserWindow, ipcMain, webContents, Menu } from 'electron'
 import os from 'os'
 /**
  * Set `__static` path to static files in production
@@ -49,7 +49,15 @@ function createWindow () {
 
 }
 
-app.on('ready', createWindow)
+/**
+ * 自定义菜单
+ */
+
+
+app.on('ready', function () {
+  createWindow()
+  
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

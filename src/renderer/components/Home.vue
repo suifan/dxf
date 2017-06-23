@@ -146,7 +146,8 @@
         isLocalActive: true,  //本机状态导航栏激活状态
         isDeviceActive: true, //大屏终端导航栏激活状态 
         goSeeDetails: false,  //查看大屏终端的详情
-        goSeeControlDetails: false  //查看控制终端详情
+        goSeeControlDetails: false,  //查看控制终端详情
+        initCount: 1
       }
     },
     components: {
@@ -156,8 +157,44 @@
     },
     mounted() {
       this.getItems()
+      console.log(`company=${this.$store.state.User.userID}`)
+      this.initSocket(`ws://192.168.147.103:7171?company=${this.$store.state.User.userID}&type=client`)
     },
     methods: {
+      initSocket (url) {
+        let ws = new WebSocket(url),
+            that = this
+        ws.onopen = function () { 
+          console.log('连接成功！')
+          // ws.send(JSON.stringify({
+          //   type: "receive"
+          // }))
+          that.$store.dispatch('setConn')
+        }
+        ws.onmessage = function (evt) {
+          let received_msg = JSON.parse(evt.data)
+          //从主题客户端+控制台接入发送信息
+          if (evt.data.type === "deviceMsg") {
+            console.log(received_msg.data)
+          }
+          //导入了运行的主题
+          if (evt.data.type === "changeTheme") {
+          }
+          
+          if(that.initCount === 1) {
+            console.log(that.initCount)
+            console.log(received_msg)
+            that.initCount ++
+          }
+          // that.$store.dispatch('getData', evt)
+        }
+        ws.onerror = function (error) {
+          console.log(error)
+        }
+        ws.onclose = function () {
+          console.log('连接已断开!')
+        }
+      },
       /**
        * 获取面板列表，并给每个item设置order
        **/

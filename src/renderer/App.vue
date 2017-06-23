@@ -2,13 +2,14 @@
   <div v-if="this.$store.state.User.loginState" id="app" onselectstart="return false">
     <!--token: 04c1bbb660650da6fb970b46b66aa973e6774959-->
     <!--gistID: 70fc2d799d4e0bfb499919c3875c2843-->
-    <div class="titleBar"></div>
+    <titleBar></titleBar>
     <div id="info-op0">{{ this.$store.state.InfoBar.info }}</div>
     <nav>
       <!-- 控制中心 -->
       <div class="center">
-        <router-link to="/" active-class="link-active">
-          <span class="iconfont icon-voice "></span>
+        <router-link :to="{path:'Home', params: {userID: this.$store.state.User.userID}}" active-class="link-active">
+          <span class="iconfont icon-voice"></span>
+          <span>{{ this.$router.params }}</span>
         </router-link>
       </div>
       <!-- 导航栏 -->
@@ -84,11 +85,6 @@
 const remote = require('electron').remote;
 const BrowserWindow = remote.BrowserWindow;
 import titleBar from './components/titleBar'
-// if (os.platform() === 'darwin') {
-//   isMac = true
-// }else {
-//   isMac = false
-// }
 export default {
   name: 'app',
   data () {
@@ -197,7 +193,9 @@ nav {
     width: 52px;
     height: inherit;
     float: left;
-    background-color: #01A6EF;
+    background-color: #24292e;
+    border-bottom: 1px solid #000000;
+    border-right: 1px solid #000000;
     text-align: center;
     span {
       color: #ffffff;
@@ -211,7 +209,7 @@ nav {
   }
   .nav {
     display: flex;
-    background-color: #2A3542;
+    background-color: #24292e;
     .infoBar {
       flex: 8;
       position: relative;
@@ -254,7 +252,7 @@ nav {
   width: 52px;
   height: calc(100% - 44px);
   float: left;
-  background-color: #2A3542;
+  background-color: #24292e;
   color: #AEB9C2;
   ul {
     text-align: center;

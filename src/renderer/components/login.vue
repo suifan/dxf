@@ -1,7 +1,7 @@
 <template>
   <div class="login">
-    <video id="video" src="../../../static/video/map4.mov" 
-    autoplay="autoplay" loop="loop" muted></video>
+    <!--<video id="video" src="../../../static/video/map4.mov" 
+    autoplay="autoplay" loop="loop" muted></video>-->
     <div class="title">
       <img src="../../../static/dxf.png" width="40" alt="">
       <span>数据连接世界,发现数据之美</span>
@@ -16,15 +16,14 @@
       </el-input>
       <button @click="login">登录</button>
     </div>
-		
+    <!--<close-menu></close-menu>-->
   </div>
 </template>
 
 <script>
   const remote = require('electron').remote;
   const BrowserWindow = remote.BrowserWindow;
-  let ipcRenderer = require('electron').ipcRenderer
-  const os = require('os')
+  const closeMenu = require('../components/menu/close-menu')
   export default {
     name: 'login',
     data () {
@@ -33,16 +32,50 @@
         pwd: ''
       }
     },
+    components: {
+      closeMenu
+    },
     methods: {
-      login () {
-        if (this.name == 'admin' && this.pwd == 123) {
-          this.$store.dispatch('doLogin')
-          BrowserWindow.win.setSize(1024, 768)
-          BrowserWindow.win.center()
-          this.$router.options.routes[0].meta.requireAuth = false
-          this.$router.push('/')
+      initSocket (url) {
+        let ws = new WebSocket(url),
+            that = this
+        ws.onopen = function () { 
+          console.log('连接成功！')
         }
+        ws.onmessage = function (evt) {
+          let received_msg = JSON.parse(evt.data)
+          if(received_msg.code === 1000){
+            BrowserWindow.win.setSize(1024, 688)
+            BrowserWindow.win.center()
+            that.$router.options.routes[0].meta.requireAuth = false
+            that.$router.push({
+              path: 'Home',
+              params: { userID: received_msg.data }
+            })
+            that.$store.dispatch('doLogin', received_msg.data)
+          }else{
+            console.log('用户名或密码错误!')
+          }
+          console.log(evt)
+          that.$store.dispatch('getData', evt)
+        }
+        ws.onerror = function (error) {
+          console.log(error)
+        }
+        ws.onclose = function () {
+          console.log('连接已断开!')
+        }
+      },
+      login () {
+        let flag = this.$store.state.User.flag
+        let company = this.name.split("_")[0]
+        let user = this.name.split("_")[1]
+        let url = `ws://192.168.147.103?type=login&flag=${flag}&company=${company}&user=${user}&psw=${this.pwd}`
+        this.initSocket(url)
       }
+    },
+    mounted () {
+      
     }
   }
 </script>
@@ -52,6 +85,7 @@
     width: 100%;
     height: 100%;
     background-color: #000;
+    
     #video {
       position: absolute;
       top: -9%;

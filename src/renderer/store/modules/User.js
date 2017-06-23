@@ -4,27 +4,18 @@ const CLIENT_CONTROL = 2 //控制台
 
 const state = {
   loginState: false,
-  user: {
-    // username: 'admin',
-    // password: '123',
-    // company: 'alf',
-    // flag: CLIENT_BACKSTAG,
-    // ip: ''
-  }
+  flag: CLIENT_BACKSTAG,
+  userID: ''
 }
 
 const getters = {
-  UN: state => {   
-    return state.user.company + '_' + state.user.username
-  }
+
 }
 
 const mutations = {
-  pushIP (state, ip) {
-    state.user.ip = ip
-  },
-  doLogin (state) {
+  doLogin (state, id) {
     state.loginState = true
+    state.userID = id
   },
   signOut (state) {
     state.loginState = false
@@ -32,11 +23,8 @@ const mutations = {
 }
 
 const actions = {
-  pushIP ({ commit }, ip) {
-    commit('pushIP', ip)
-  },
-  doLogin ({ commit }) {
-    commit('doLogin')
+  doLogin ({ commit }, id) {
+    commit('doLogin', id)
   },
   signOut ({ commit }) {
     commit('signOut')

@@ -1,62 +1,40 @@
 <template>
   <div class="titleBar win">
-    <button class="iconfont icon-close"  @click.prevent="close"></button>
-    <span class="iconfont icon-maximize" @click.prevent="maximize"></span>
-    <span class="iconfont icon-minimze" @click.prevent="minimize"></span>
+    <div class="drag"></div>
+    <div class="menu">
+      <close-menu></close-menu>
+    </div>
   </div>
 </template>
 
 <script>
-let ipcRenderer = require('electron').ipcRenderer
-
+import closeMenu from './menu/close-menu'
 export default {
-  data() {
-    return {
-      isBig: false
-    }
-  },
-  methods: {
-    close() {
-      console.log(ipcRenderer)
-      ipcRenderer.send('window-all-closed')
-    },
-    maximize() {
-      this.isBig ? ipcRenderer.send('unmaximize') : ipcRenderer.send('maximize');
-    },
-    minimize() {
-      ipcRenderer.send('minimize')
-    }
-  },
-  mounted () {
-
+  components: {
+    closeMenu
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .titleBar {
-  width: 100%;
-  height: 22px;
-  line-height: 22px;
-  color: rgb(157, 165, 180);
-  background-color: rgb(33, 37, 43);
-  font-size: 12px;
-  -webkit-app-region: drag;
-  span {
+  border-bottom: 1px solid #000000;
+  .drag {
     display: inline-block;
-    // float: right;
-    width: 44px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
-    &:hover {
-      color: #ffffff;
-      background-color: #6b6b6b;
-    }
+    width: calc(100% - 132px);
+    height: 100%;
+    background-color: #24292e;
+    -webkit-app-region: drag;
+  }
+  .menu { 
+    float: right;
+    width: 132px; 
+    height: 100%;
+    background-color: #24292e;
   }
 }
 
-// .win {
-//   height: 28px!important;
-// }
+.win {
+  height: 28px!important;
+}
 </style>
