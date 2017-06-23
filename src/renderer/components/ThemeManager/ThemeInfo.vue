@@ -167,7 +167,7 @@
           describe = document.getElementById('describe'),
           modify = document.getElementById('modify'),
           finish = document.getElementById('finish')
-        if (this.$store.getters.isTheme) {
+        if (!this.$store.getters.isTheme) {
           modify.style.color = '#D32E50'
           finish.className = 'iconfont icon-finish transparent show'
           themeName.removeAttribute('readonly')

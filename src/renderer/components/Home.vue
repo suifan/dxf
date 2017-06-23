@@ -4,7 +4,7 @@
     <!-- 大屏终端 -->
     <!-- 控制终端 -->
     <div class="flex-container">
-      <div class="item" @click="clickPanel('1')" style="transform: translate(-26%, 80%) scale(.48)">
+      <div class="item" @click="clickPanel('1')" style="transform: translate(-26%, 79%) scale(.48)">
         <span class="title bg-green">控制终端</span>
         <div v-if="goSeeControlDetails" class="menu">
           <ul>
@@ -28,12 +28,13 @@
           </div>
           <div v-else class="device">
             <ul v-if="this.$store.getters.isControlDevice" class="Device-list">
-              <template v-for="list in this.$store.state.Device.controlList">
+              <template v-for="(list, key, index) in this.$store.state.Device.controlList">
                 <li>
                   <span class="iconfont icon-ipad"></span>
                   &nbsp;{{ list.remark ? list.remark : list.localIP }}
                   &nbsp;&nbsp;&nbsp;<el-button @click="seeControlDetails()">查看详情</el-button>
-                  <el-button type="primary">连接</el-button>
+                  <el-button v-if="list.connect" type="success">{{ list.deviceState }}</el-button>
+                  <el-button v-else type="danger">{{ list.deviceState }}</el-button>
                 </li>
               </template>
             </ul>
@@ -43,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="item" @click="clickPanel('2')" style="transform: translate(26%, 80%) scale(.48)">
+      <div class="item" @click="clickPanel('2')" style="transform: translate(26%, 79%) scale(.48)">
         <span class="title bg-screen">大屏终端</span>
         <div v-if="goSeeDetails" class="menu">
           <ul>

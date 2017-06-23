@@ -1,7 +1,8 @@
 <template>
-  <div v-if="this.$store.state.User.loginState" id="app">
+  <div v-if="this.$store.state.User.loginState" id="app" onselectstart="return false">
     <!--token: 04c1bbb660650da6fb970b46b66aa973e6774959-->
     <!--gistID: 70fc2d799d4e0bfb499919c3875c2843-->
+    <div class="titleBar"></div>
     <div id="info-op0">{{ this.$store.state.InfoBar.info }}</div>
     <nav>
       <!-- 控制中心 -->
@@ -71,14 +72,17 @@
       <router-view></router-view>
     </div>
   </div>
-  <div v-else id="app">
-    <router-view></router-view>
+  <div v-else id="app" onselectstart="return false">
+    <div class="titleBar"></div>
+    <div class="mainLogin">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
 const remote = require('electron').remote;
-  const BrowserWindow = remote.BrowserWindow;
+const BrowserWindow = remote.BrowserWindow;
 export default {
   name: 'app',
   data () {
@@ -135,8 +139,9 @@ export default {
     },
     signOut () {
       this.$store.dispatch('signOut')
-      BrowserWindow.win.setSize(800, 622)
+      BrowserWindow.win.setSize(800, 600)
       BrowserWindow.win.center()
+      this.$router.options.routes[0].meta.requireAuth = true
       this.$router.push('Login')
 
     }
@@ -162,10 +167,29 @@ export default {
   width: 100%;
   height: 100%;
 }
+.titleBar {
+  width: 100%;
+  height: 22px;
+  line-height: 22px;
+  color: rgb(157, 165, 180);
+  background-color: rgb(33, 37, 43);
+  font-size: 12px;
+}
+.mainLogin {
+  position: absolute;
+  top: 22px;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: calc(100% - 22px);
+  background-color: rgb(51, 56, 66);
+}
 #info-op0 {
   display: none
 }
 nav {
+  // position: relative;
+  // top: 22px;
   height: 44px;
   .center {
     width: 52px;

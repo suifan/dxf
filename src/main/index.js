@@ -15,6 +15,12 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow
 let contents
+let isMac
+if (os.platform() === 'darwin') {
+  isMac = true
+}else {
+  isMac = false
+}
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
@@ -26,16 +32,11 @@ function createWindow () {
     useContentSize: true,
     width: 800,
     backgroundColor: '#373D41',
-    // frame: false
-    titleBarStyle: 'hidden'
+    frame: isMac ? true : false,
+    titleBarStyle: isMac ? 'hidden' : 'show'
   })
 
-  if (os.platform() === 'darwin') {
-    mainWindow.titleBarStyle = ''
-  }else {
-    mainWindow.frame = false
-  }
-  console.log(mainWindow.titleBarStyle)
+  
 
   mainWindow.loadURL(winURL)
 

@@ -34,11 +34,9 @@
     },
     methods: {
       login () {
-        console.log(os.platform())
-        console.log(process.platform)
         if (this.name == 'admin' && this.pwd == 123) {
           this.$store.dispatch('doLogin')
-          BrowserWindow.win.setSize(1000, 692)
+          BrowserWindow.win.setSize(1024, 768)
           BrowserWindow.win.center()
           this.$router.options.routes[0].meta.requireAuth = false
           this.$router.push('/')
@@ -55,7 +53,7 @@
     background-color: #000;
     #video {
       position: absolute;
-      top: -6%;
+      top: -9%;
       width: 100%;
       height: 670px;
     }
