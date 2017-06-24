@@ -32,7 +32,7 @@
                 <li>
                   <span class="iconfont icon-ipad"></span>
                   &nbsp;{{ list.ip }}
-                  &nbsp;&nbsp;&nbsp;<el-button @click="seeControlDetails()">查看详情</el-button>
+                  &nbsp;&nbsp;&nbsp;<el-button @click="seeControlDetails(list.connect)">查看详情</el-button>
                   <el-button v-if="list.connect" type="success">{{ list.connect ? "在线" : "离线" }}</el-button>
                   <el-button v-else type="danger">{{ list.connect ? "在线" : "离线" }}</el-button>
                 </li>
@@ -86,7 +86,7 @@
                 <li>
                   <span class="iconfont icon-mac"></span>
                   {{ list.note }} ({{ list.ip }})
-                  &nbsp;&nbsp;&nbsp;<el-button @click="seeDetails()">查看详情</el-button>
+                  &nbsp;&nbsp;&nbsp;<el-button @click="seeDetails(list.connect)">查看详情</el-button>
                   <el-button v-if="list.connect" type="success">{{ list.connect ? "在线" : "离线" }}</el-button>
                   <el-button v-else type="danger">{{ list.connect ? "在线" : "离线" }}</el-button>
                 </li>
@@ -158,7 +158,7 @@
     mounted() {
       let companyID = localStorage.getItem('companyID')
       this.getItems()
-      this.initSocket(`${this.$store.state.url.client}?company=${companyID}&type=client`)
+      // this.initSocket(`${this.$store.state.url.client}?company=${companyID}&type=client`)
     },
     methods: {
       initSocket (url) {
@@ -277,14 +277,31 @@
       /**
        * 查看大屏终端详情
        **/
-      seeDetails () {
-        this.goSeeDetails = true
+      seeDetails (msg) {
+        if (msg) {
+          this.goSeeDetails = true
+        }else {
+          this.$store.dispatch('pushIMsg', {
+            stateCode: 0,
+            stateType: 'warning',
+            stateMsg: '离线状态下无法查看详情!'
+          })
+        }
       },
       /**
        * 查看控制终端详情
        **/
-      seeControlDetails () {
-        this.goSeeControlDetails = true
+      seeControlDetails (msg) {
+        if (msg) {
+          this.goSeeControlDetails = true
+        }else {
+          this.$store.dispatch('pushIMsg', {
+            stateCode: 0,
+            stateType: 'warning',
+            stateMsg: '离线状态下无法查看详情!'
+          })
+        }
+        
       },
       /**
        * 切换大屏终端详情

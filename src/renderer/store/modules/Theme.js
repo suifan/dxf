@@ -2,16 +2,16 @@ const state = {
   noRunTheme: true,  //
   themeList: [
     {
-      imgSrc: '',
-      name: '集团信息',
-      describe: '',
-      uploadTime: '2017/6/12'
+      "id": 1,
+      "src": "http://www.jnoos.com/DXF/index.html",
+      "memberId": 1,
+      "name": "全渠道"
     },
     {
-      imgSrc: '',
-      name: '全渠道大屏',
-      describe: '关于集团产品全渠道销售详情',
-      uploadTime: '2017/6/12'
+      "id": 2,
+      "src": "http://www.jnoos.com",
+      "memberId": 1,
+      "name": "智能智造"
     }
   ]
 }

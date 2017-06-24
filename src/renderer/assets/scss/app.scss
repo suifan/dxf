@@ -103,7 +103,7 @@ textarea { resize:none }
       transform: translateY(0);
     }
     to {
-      transform: translateY(-44px);
+      transform: translateY(-10px);
       opacity: 0; 
     }
   } 
@@ -116,7 +116,7 @@ textarea { resize:none }
       transform: translateY(0);
     }
     to {
-      transform: translateY(-44px);
+      transform: translateY(-10px);
       opacity: 0; 
     }
   } 
@@ -125,7 +125,7 @@ textarea { resize:none }
   animation: enter 1.5s ease; 
   @include keyframes(enter) {
     from {
-      transform: translateY(-44px);
+      transform: translateY(-10px);
     }
     to {
       transform: translateY(0);

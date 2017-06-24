@@ -8,7 +8,7 @@
       <!-- 控制中心 -->
       <div class="center">
         <router-link to="/" active-class="link-active">
-          <span class="iconfont icon-voice"></span>
+          <span class="iconfont icon-voice curzz"></span>
         </router-link>
       </div>
       <!-- 导航栏 -->

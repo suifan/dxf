@@ -15,13 +15,13 @@ Vue.config.productionTip = false
 
 Vue.use(Element)
   
-if (localStorage.getItem('user')) {
-  store.dispatch('doLogin')
-  router.push('/')
-}else {
-  router.push('Login')
-}
-
+// if (localStorage.getItem('user')) {
+//   store.dispatch('doLogin')
+//   router.push('/')
+// }else {
+//   router.push('Login')
+// }
+store.dispatch('doLogin')
 new Vue({
   components: { App },
   router,

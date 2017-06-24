@@ -90,7 +90,7 @@
                 <div @click="selectRunTheme($event, item)">
                   <!--<img :src="item.img" :alt="item.name" width="120">-->
                   <span>{{ item.name }}</span>
-                  <el-button @click="preview">预览</el-button>
+                  <el-button @click="preview" size="small">预览</el-button>
                 </div>
               </template>
             </div>
@@ -106,6 +106,7 @@
                 <div @click="selectNowTheme($event, item)">
                   <!--<img :src="item.img" :alt="item.name" width="120">-->
                   <span>{{ item.name }}</span>
+                  <el-button @click="preview" size="small">预览</el-button>
                 </div>
               </template>
             </div>
@@ -144,6 +145,9 @@
         selectdevice: ''
       }
     },
+    mounted () {
+      // this.rts()
+    },
     methods: {
       /**
        * 读取主题列表
@@ -152,6 +156,8 @@
        **/
       readThemeList (e, item) {
         let children = e.target.parentNode.children
+        let runTheme = [],
+            theme = this.themeList.slice(0)  
         if (e.target.className === 'select') {
           this.isSelectDevice = false
           e.target.className = ''
@@ -165,12 +171,22 @@
             i.className = ''
           }
           e.target.className = 'select'
-          for (let i of this.ScreenRunTheme) {
-            if(item.ip === i.ip) {
-              this.runTheme = i.runTheme
-              this.theme = i.nowTheme
+          for(let i of this.runList) {
+            for(let i2 of i.id) {
+              for(let i3 of this.themeList) {
+                if (item.ip === i.ip) {
+                  if (i2 == i3.id) {
+                    runTheme.push(i3)
+                  } 
+                }
+              }
             }
           }
+          for (let i of runTheme) {
+            _.remove(theme, item => item.id == i.id)
+          }
+          this.runTheme = runTheme
+          this.theme = theme
         }
       },
       /**
@@ -227,13 +243,10 @@
       importTheme () {
         let dom = document.getElementById('nowtheme')
         let t_id = []
-        for (let i of this.ScreenRunTheme) {
-          let rt = _.get(i, "runTheme"),
-              t = _.get(i, "nowTheme")
-          if (i.ip === this.selectdevice.ip) {
+          if (this.sNowTheme.length != 0) {
             for(let i2 of this.sNowTheme) {
-              _.remove(t, item => item.name === i2.name)
-              rt.push(i2)
+              let news = _.remove(this.theme, item => item.id === i2.id)
+              this.runTheme = this.runTheme.concat(news)
               t_id.push(i2.id)
               for(let i3 of dom.childNodes) {
                 i3.className = ''
@@ -247,31 +260,44 @@
 								val: t_id.toString()
               }
             }
-            this.$store.state.socket.ws.send(JSON.stringify(msg))
+            this.$store.dispatch('addThemes', {
+              ip: this.selectdevice.ip,
+							themes: t_id
+            })
+            // this.$store.state.socket.ws.send(JSON.stringify(msg))
             this.sNowTheme = []
           }  
-        } 
-        
       },
       /**
        * 选中的主题导出到现有主题中
        **/
       exportTheme () {
         let dom = document.getElementById('runtheme')
-        for (let i of this.ScreenRunTheme) {
-          let rt = _.get(i, "runTheme"),
-              t = _.get(i, "nowTheme")
-          if (i.ip === this.selectdevice.ip) {
+        let t_id = []
+          if (this.sRunTheme.length != 0) {
             for(let i2 of this.sRunTheme) {
-              _.remove(rt, item => item.name === i2.name)
-              t.push(i2)
+              let news = _.remove(this.runTheme, item => item.id === i2.id)
+              this.theme = this.theme.concat(news)
+              t_id.push(i2.id)
               for(let i3 of dom.childNodes) {
                 i3.className = ''
               }
             }
+            let msg = {
+              type: "changeTheme",
+              data: {
+                id: this.selectdevice.id,
+								val: t_id.toString()
+              }
+            }
+            this.$store.dispatch('delThemes', {
+              ip: this.selectdevice.ip,
+							themes: t_id
+            })
+            // this.$store.state.socket.ws.send(JSON.stringify(msg))
             this.sRunTheme = []
           }  
-        }
+        
       },
       preview (item) {
         
@@ -289,9 +315,17 @@
           })
         }
         return arr
+      },
+      runList () {
+        let arr = []
+        for(let i of this.maxScreenList) {
+          arr.push({
+            ip: i.ip,
+            id: i.themes.split(',')
+          })
+        } 
+        return arr   
       }
-    },
-    mounted () {
     }
   }
 </script>

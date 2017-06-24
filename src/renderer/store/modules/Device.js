@@ -1,9 +1,34 @@
 const state = { 
   maxScreenList: [    //大屏列表
-
+    {
+      "id": 1,
+      "ip": "192.168.147.116",
+      "note": "大厅大屏",
+      "device": "windows",
+      "type": "show",
+      "themes": "1,2",
+      "memberId": 1
+    },
+    {
+      "id": 3,
+      "ip": "192.168.147.103",
+      "note": "董事长电脑",
+      "device": "windows",
+      "type": "show",
+      "themes": "1",
+      "memberId": 1
+    }
   ],
   controlList: [  //控制端列表
-
+    {
+      "id": 2,
+      "ip": "192.168.147.118",
+      "note": "平板",
+      "device": "IOS",
+      "type": "ctrl",
+      "themes": "",
+      "memberId": 1
+    }
   ]
 }
 
@@ -23,19 +48,47 @@ const mutations = {
   pushControlList (state, data) {
     state.controlList = data
   },
+  addThemes (state, data) {
+    for (let i of state.maxScreenList) {
+      let arr
+      if (i.themes === '' || i.themes.length === 1) {
+        arr = i.themes.split('')
+      }else {
+        arr = i.themes.split(',')
+      }
+      if (i.ip == data.ip) {
+        i.themes = arr.concat(data.themes).toString()
+      }
+    }
+  },
+  delThemes (state, data) {
+    for (let i of state.maxScreenList) {
+      let arr
+      if (i.themes === '' || i.themes.length === 1) {
+        arr = i.themes.split('')
+      }else {
+        arr = i.themes.split(',')
+      }
+      if (i.ip == data.ip) {
+        for (let i2 of data.themes) {
+          _.remove(arr, n => n == i2)
+        }
+        
+        i.themes = arr.toString()
+      }
+    }
+  },
   maxScreenGoOnline (state, ip) {
     for(let i of state.maxScreenList) {
-      if(_.get(i, 'localIP') === ip) {
+      if(_.get(i, 'ip') === ip) {
         i.connect = true
-        i.deviceState = '在线'
       }
     }
   },
   maxScreenOffLine (state, ip) {
     for(let i of state.maxScreenList) {
-      if(_.get(i, 'localIP') === ip) {
+      if(_.get(i, 'ip') === ip) {
         i.connect = false
-        i.deviceState = '离线'
       }
     }
   }
@@ -47,6 +100,12 @@ const actions = {
   },
   pushControlList ({ commit }, data) {
     commit('pushControlList', data)
+  },
+  addThemes ({ commit }, data) {
+    commit('addThemes', data)
+  },
+  delThemes ({ commit }, data) {
+    commit('delThemes', data)
   },
   maxScreenGoOnline ({ commit }, ip) {
     commit('goOnline', ip)
