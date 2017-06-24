@@ -4,17 +4,10 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
-     {
-      path: '/',
-      meta: {
-        requireAuth: true
-      },
-      component: require('@/components/Home')
-    },
     {
-      path: '/Home/:userID',
+      path: '/',
       name: 'Home',
       meta: {
         requireAuth: true

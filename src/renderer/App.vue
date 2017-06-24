@@ -7,9 +7,8 @@
     <nav>
       <!-- 控制中心 -->
       <div class="center">
-        <router-link :to="{path:'Home', params: {userID: this.$store.state.User.userID}}" active-class="link-active">
+        <router-link to="/" active-class="link-active">
           <span class="iconfont icon-voice"></span>
-          <span>{{ this.$router.params }}</span>
         </router-link>
       </div>
       <!-- 导航栏 -->
@@ -36,11 +35,11 @@
       </div>
     </nav>
     <!-- 侧边栏菜单 -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
       <ul>
-        <li>
+        <!--<li>
           <span class="iconfont icon-menu bule"></span>
-        </li>
+        </li>-->
         <li>
           <router-link to="/TM/ThemeUpload" active-class="link-active">
             <span class="iconfont icon-upload" title="主题上传"></span>
@@ -82,14 +81,13 @@
 </template>
 
 <script>
-const remote = require('electron').remote;
-const BrowserWindow = remote.BrowserWindow;
-import titleBar from './components/titleBar'
+import titleBar from './components/menu/titleBar'
 export default {
   name: 'app',
   data () {
     return {
       baseURI: '', //存储组件的路径
+      win: this.$electron.remote.BrowserWindow.win
     }
   },
   components : {
@@ -144,11 +142,10 @@ export default {
     },
     signOut () {
       this.$store.dispatch('signOut')
-      BrowserWindow.win.setSize(800, 600)
-      BrowserWindow.win.center()
+      this.win.setSize(800, 600)
+      this.win.center()
       this.$router.options.routes[0].meta.requireAuth = true
       this.$router.push('Login')
-
     }
   },
   mounted () {
@@ -174,12 +171,8 @@ export default {
 }
 
 .mainLogin {
-  position: absolute;
-  top: 28px;
-  left: 0px;
-  bottom: 0px;
   width: 100%;
-  height: calc(100% - 28px);
+  height: 100%;
   background-color: rgb(51, 56, 66);
 }
 #info-op0 {
@@ -254,6 +247,7 @@ nav {
   float: left;
   background-color: #24292e;
   color: #AEB9C2;
+  transition: all .8s;
   ul {
     text-align: center;
     li {
@@ -283,13 +277,16 @@ nav {
       span {
         font-size: 1.2rem;
       }
+      .title {
+        font-size: .9rem;
+      }
     }
   }
 }
 
 .main {
   position: relative;
-  width: calc(100% - 52px);
+  width: auto;
   height: calc(100% - 44px);
   overflow-x: hidden;
   overflow-y: auto;

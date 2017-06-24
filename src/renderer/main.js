@@ -19,8 +19,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     if (!store.state.User.User) {
       next ({
-        path: '/Login',
-        params: {redirect: to.fullPath}
+        path: '/Login'
       })
     }else {
       next()

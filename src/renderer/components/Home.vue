@@ -4,7 +4,7 @@
     <!-- 大屏终端 -->
     <!-- 控制终端 -->
     <div class="flex-container">
-      <div class="item" @click="clickPanel('1')" style="transform: translate(-26%, 79%) scale(.48)">
+      <div class="item" @click="clickPanel('1')" style="transform: translate(-26%, 78%) scale(.48)">
         <span class="title bg-green">控制终端</span>
         <div v-if="goSeeControlDetails" class="menu">
           <ul>
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="item" @click="clickPanel('2')" style="transform: translate(26%, 79%) scale(.48)">
+      <div class="item" @click="clickPanel('2')" style="transform: translate(26%, 78%) scale(.48)">
         <span class="title bg-screen">大屏终端</span>
         <div v-if="goSeeDetails" class="menu">
           <ul>
@@ -158,7 +158,7 @@
     mounted() {
       this.getItems()
       console.log(`company=${this.$store.state.User.userID}`)
-      this.initSocket(`ws://192.168.147.103:7171?company=${this.$store.state.User.userID}&type=client`)
+      // this.initSocket(`ws://192.168.147.103:7171?company=${this.$store.state.User.userID}&type=client`)
     },
     methods: {
       initSocket (url) {
@@ -291,7 +291,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-    padding: 20px 0;
+    padding: 15px 0;
     .flex-container {
       position: relative; 
       width: 95%;

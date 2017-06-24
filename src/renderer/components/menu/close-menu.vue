@@ -12,20 +12,21 @@ export default {
   name: 'clsoe-menu',
   data() {
     return {
-      isBig: false
+      isBig: false,
+      ipc: this.$electron.ipcRenderer
     }
   },
   methods: {
     close() {
-      ipcRenderer.send('window-all-closed')
+      this.ipc.send('window-all-closed')
     },
     maximize(e) {
       if (this.isBig) {
-        ipcRenderer.send('unmaximize')
+        this.ipc.send('unmaximize')
         e.target.className = 'iconfont icon-maximize'
         this.isBig = false
       } else {
-        ipcRenderer.send('maximize')
+        this.ipc.send('maximize')
         e.target.className = 'iconfont icon-restore'
         this.isBig = true
       }

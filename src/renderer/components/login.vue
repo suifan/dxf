@@ -21,15 +21,14 @@
 </template>
 
 <script>
-  const remote = require('electron').remote;
-  const BrowserWindow = remote.BrowserWindow;
   const closeMenu = require('../components/menu/close-menu')
   export default {
     name: 'login',
     data () {
       return {
         name: '',
-        pwd: ''
+        pwd: '',
+        win: this.$electron.remote.BrowserWindow.win
       }
     },
     components: {
@@ -45,8 +44,8 @@
         ws.onmessage = function (evt) {
           let received_msg = JSON.parse(evt.data)
           if(received_msg.code === 1000){
-            BrowserWindow.win.setSize(1024, 688)
-            BrowserWindow.win.center()
+            that.win.setSize(1024, 688)
+            that.win.center()
             that.$router.options.routes[0].meta.requireAuth = false
             that.$router.push({
               path: 'Home',
@@ -71,7 +70,12 @@
         let company = this.name.split("_")[0]
         let user = this.name.split("_")[1]
         let url = `ws://192.168.147.103?type=login&flag=${flag}&company=${company}&user=${user}&psw=${this.pwd}`
-        this.initSocket(url)
+        // this.initSocket(url)
+        this.win.setSize(1024, 688)
+        this.win.center()
+        this.$router.options.routes[0].meta.requireAuth = false
+        this.$router.push('/')
+        this.$store.dispatch('doLogin', 1)
       }
     },
     mounted () {

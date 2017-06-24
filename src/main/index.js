@@ -11,12 +11,12 @@ import os from 'os'
  */
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static')
-}
+} 
 
 let mainWindow
 let contents
 let isMac 
-if (os.platform() === 'darwin') {
+if (os.platform() === 'darwin') { 
   isMac = true
 }else {
   isMac = false
@@ -78,7 +78,6 @@ app.on('activate', () => {
  */
 //EXIT
 ipcMain.on('window-all-closed', () => {
-  console.log('sssss')
   app.quit()
 })
 // minimize
@@ -92,6 +91,9 @@ ipcMain.on('maximize', () => {
 // unmaximize
 ipcMain.on('unmaximize', () => {
   mainWindow.unmaximize()
+})
+ipcMain.on('platform', (event, arg) => {
+  event.sender.send('isMac', isMac)
 })
 
 /**
