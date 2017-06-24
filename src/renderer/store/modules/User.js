@@ -4,8 +4,7 @@ const CLIENT_CONTROL = 2 //控制台
 
 const state = {
   loginState: false,
-  flag: CLIENT_BACKSTAG,
-  userID: ''
+  flag: CLIENT_BACKSTAG
 }
 
 const getters = {
@@ -13,9 +12,8 @@ const getters = {
 }
 
 const mutations = {
-  doLogin (state, id) {
+  doLogin (state) {
     state.loginState = true
-    state.userID = id
   },
   signOut (state) {
     state.loginState = false
@@ -23,8 +21,8 @@ const mutations = {
 }
 
 const actions = {
-  doLogin ({ commit }, id) {
-    commit('doLogin', id)
+  doLogin ({ commit }) {
+    commit('doLogin')
   },
   signOut ({ commit }) {
     commit('signOut')

@@ -14,20 +14,13 @@ Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 Vue.use(Element)
-
-router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
-    if (!store.state.User.User) {
-      next ({
-        path: '/Login'
-      })
-    }else {
-      next()
-    }
-  }else {
-    next()
-  }
-})
+  
+if (localStorage.getItem('user')) {
+  store.dispatch('doLogin')
+  router.push('/')
+}else {
+  router.push('Login')
+}
 
 new Vue({
   components: { App },

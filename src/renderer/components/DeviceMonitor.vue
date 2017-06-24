@@ -21,11 +21,11 @@
           </tr>
           <template v-for="list,index in maxScreenList">
             <tr>
-              <td>{{ index+1 }}</td>
-              <td>{{ list.localIP }}</td>
-              <td>{{ list.remark }}</td>
-              <td>{{ list.systemOS }}</td>
-              <td>{{ list.deviceState }}</td>
+              <td>{{ list.id }}</td>
+              <td>{{ list.ip }}</td>
+              <td>{{ list.note }}</td>
+              <td>{{ list.device }}</td>
+              <td>{{ list.connect ? "在线" : "离线" }}</td>
             </tr>
           </template>
         </tbody>
@@ -49,16 +49,14 @@
             <td>操作系统</td>
             <td>设备类型</td> 
             <td>设备状态</td>
-            <td>使用时长</td>
           </tr>
           <template v-for="list,index in controlList">
             <tr>
-              <td>{{ index+1 }}</td>
-              <td>{{ list.localIP }}</td>
-              <td>{{ list.systemOS }}</td>
-              <td>{{ list.deviceType }}</td>
-              <td>{{ list.deviceState }}</td>
-              <td>{{ list.useTime }}</td>
+              <td>{{ list.id }}</td>
+              <td>{{ list.ip }}</td>
+              <td>{{ list.device }}</td>
+              <td>{{ list.note }}</td>
+              <td>{{ list.connect ? "在线" : "离线" }}</td>
             </tr>
           </template>
         </tbody>
@@ -76,7 +74,7 @@
           <p class="title">设备列表</p> 
           <ul v-if="!isDevice" class="Device-list">
             <template v-for="list in maxScreenList">
-              <li @click="readThemeList($event, list.localIP)">{{ list.remark ? list.remark : list.localIP }}</li>
+              <li @click="readThemeList($event, list)">{{ list.note ? list.note : list.ip }}</li>
             </template>
           </ul>
           <div v-else class="NotDevice">
@@ -92,6 +90,7 @@
                 <div @click="selectRunTheme($event, item)">
                   <!--<img :src="item.img" :alt="item.name" width="120">-->
                   <span>{{ item.name }}</span>
+                  <el-button @click="preview">预览</el-button>
                 </div>
               </template>
             </div>
@@ -142,7 +141,7 @@
         theme: [],
         sNowTheme: [],
         sRunTheme: [],
-        selectIP: ''
+        selectdevice: ''
       }
     },
     methods: {
@@ -151,23 +150,23 @@
        * @params  e: 当前元素
        * @params  ip: 读取的设备IP
        **/
-      readThemeList (e, ip) {
+      readThemeList (e, item) {
         let children = e.target.parentNode.children
         if (e.target.className === 'select') {
           this.isSelectDevice = false
           e.target.className = ''
-          this.selectIP = ''
+          this.selectdevice = ''
           this.runTheme = ''
           this.theme = ''
         }else {
           this.isSelectDevice = true
-          this.selectIP = ip
+          this.selectdevice = item
           for (let i of children) {
             i.className = ''
           }
           e.target.className = 'select'
           for (let i of this.ScreenRunTheme) {
-            if(ip === i.localIP) {
+            if(item.ip === i.ip) {
               this.runTheme = i.runTheme
               this.theme = i.nowTheme
             }
@@ -227,20 +226,32 @@
        **/
       importTheme () {
         let dom = document.getElementById('nowtheme')
+        let t_id = []
         for (let i of this.ScreenRunTheme) {
           let rt = _.get(i, "runTheme"),
               t = _.get(i, "nowTheme")
-          if (i.localIP === this.selectIP) {
+          if (i.ip === this.selectdevice.ip) {
             for(let i2 of this.sNowTheme) {
               _.remove(t, item => item.name === i2.name)
               rt.push(i2)
+              t_id.push(i2.id)
               for(let i3 of dom.childNodes) {
                 i3.className = ''
               }
             }
+           
+            let msg = {
+              type: "changeTheme",
+              data: {
+                id: this.selectdevice.id,
+								val: t_id.toString()
+              }
+            }
+            this.$store.state.socket.ws.send(JSON.stringify(msg))
             this.sNowTheme = []
           }  
-        }
+        } 
+        
       },
       /**
        * 选中的主题导出到现有主题中
@@ -250,7 +261,7 @@
         for (let i of this.ScreenRunTheme) {
           let rt = _.get(i, "runTheme"),
               t = _.get(i, "nowTheme")
-          if (i.localIP === this.selectIP) {
+          if (i.ip === this.selectdevice.ip) {
             for(let i2 of this.sRunTheme) {
               _.remove(rt, item => item.name === i2.name)
               t.push(i2)
@@ -261,6 +272,9 @@
             this.sRunTheme = []
           }  
         }
+      },
+      preview (item) {
+        
       }
     },
     computed: {
@@ -269,7 +283,7 @@
         let arr = []
         for (let i of this.maxScreenList) {
           arr.push({
-            localIP: i.localIP,
+            ip: i.ip,
             runTheme: [],
             nowTheme: this.themeList.slice(0)
           })

@@ -1,29 +1,9 @@
 const state = { 
   maxScreenList: [    //大屏列表
-    {
-      localIP: "127.0.0.1",
-      remark: "前台大屏",
-      systemOS: 'window 10',
-      deviceState: '在线',
-      connect: true
-    }, {
-      localIP: "127.0.0.100",
-      remark: "董事长电脑",
-      systemOS: 'window 7',
-      deviceState: '离线',
-      connect: false
-    }
+
   ],
   controlList: [  //控制端列表
-    {
-      localIP: "127.0.10.100",
-      remark: "",
-      systemOS: 'window 7',
-      deviceType: 'ipad',
-      deviceState: '离线',
-      useTime: '12min',
-      connect: false
-    }
+
   ]
 }
 
@@ -38,10 +18,10 @@ const getters = {
 
 const mutations = {
   pushMaxScreenList (state, data) {
-    state.maxScreenList.push(data)
+    state.maxScreenList = data
   },
   pushControlList (state, data) {
-    state.controlList.push(data)
+    state.controlList = data
   },
   maxScreenGoOnline (state, ip) {
     for(let i of state.maxScreenList) {

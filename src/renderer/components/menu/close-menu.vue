@@ -47,7 +47,7 @@ export default {
   width: autp;
   height: 28px;
   color: #aaaaaa;
-  background-color: #21252b;
+  background-color: #24292e;
   span {
     // display: inline-block;
     float: right;

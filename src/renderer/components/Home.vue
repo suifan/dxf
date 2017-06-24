@@ -31,10 +31,10 @@
               <template v-for="(list, key, index) in this.$store.state.Device.controlList">
                 <li>
                   <span class="iconfont icon-ipad"></span>
-                  &nbsp;{{ list.remark ? list.remark : list.localIP }}
+                  &nbsp;{{ list.ip }}
                   &nbsp;&nbsp;&nbsp;<el-button @click="seeControlDetails()">查看详情</el-button>
-                  <el-button v-if="list.connect" type="success">{{ list.deviceState }}</el-button>
-                  <el-button v-else type="danger">{{ list.deviceState }}</el-button>
+                  <el-button v-if="list.connect" type="success">{{ list.connect ? "在线" : "离线" }}</el-button>
+                  <el-button v-else type="danger">{{ list.connect ? "在线" : "离线" }}</el-button>
                 </li>
               </template>
             </ul>
@@ -82,13 +82,13 @@
               没有连接的设备
             </div>
             <ul v-else class="Device-list">
-              <template v-for="list in this.$store.state.Device.maxScreenList">
+              <template  v-for="list in this.$store.state.Device.maxScreenList">
                 <li>
                   <span class="iconfont icon-mac"></span>
-                  {{ list.remark ? list.remark : list.localIP }}
+                  {{ list.note }} ({{ list.ip }})
                   &nbsp;&nbsp;&nbsp;<el-button @click="seeDetails()">查看详情</el-button>
-                  <el-button v-if="list.connect" type="success">{{ list.deviceState }}</el-button>
-                  <el-button v-else type="danger">{{ list.deviceState }}</el-button>
+                  <el-button v-if="list.connect" type="success">{{ list.connect ? "在线" : "离线" }}</el-button>
+                  <el-button v-else type="danger">{{ list.connect ? "在线" : "离线" }}</el-button>
                 </li>
               </template>
             </ul>
@@ -156,37 +156,53 @@
       'ec-pie': pie
     },
     mounted() {
+      let companyID = localStorage.getItem('companyID')
       this.getItems()
-      console.log(`company=${this.$store.state.User.userID}`)
-      // this.initSocket(`ws://192.168.147.103:7171?company=${this.$store.state.User.userID}&type=client`)
+      this.initSocket(`${this.$store.state.url.client}?company=${companyID}&type=client`)
     },
     methods: {
       initSocket (url) {
-        let ws = new WebSocket(url),
-            that = this
+        let ws = new WebSocket(url)
+        let that = this
         ws.onopen = function () { 
           console.log('连接成功！')
-          // ws.send(JSON.stringify({
-          //   type: "receive"
-          // }))
+          setTimeout(function() {
+            ws.send(JSON.stringify({
+              type: "receive"
+            }))
+          }, 5000);
+          that.$store.dispatch('getws', ws)
           that.$store.dispatch('setConn')
         }
         ws.onmessage = function (evt) {
           let received_msg = JSON.parse(evt.data)
           //从主题客户端+控制台接入发送信息
-          if (evt.data.type === "deviceMsg") {
+          if (received_msg.type === "deviceMsg") {
+            console.log('....////')
             console.log(received_msg.data)
           }
           //导入了运行的主题
-          if (evt.data.type === "changeTheme") {
-          }
+          // if (received_msg.type === "changeTheme") {
+          //   console.log('jszt')
+          // }
           
           if(that.initCount === 1) {
-            console.log(that.initCount)
-            console.log(received_msg)
+            let MaxScreenList = [],
+                ControlList = []
+            for (let i of received_msg.data.device) {
+              i.connect = false
+              if (i.type === 'show') {
+                MaxScreenList.push(i)
+              }else {
+                ControlList.push(i)
+              }
+            }
+            console.log('MaxScreenList')
+            that.$store.dispatch('pushMaxScreenList', MaxScreenList)
+            that.$store.dispatch('pushControlList', ControlList)
+            that.$store.dispatch('pushThemeList', received_msg.data.theme)
             that.initCount ++
           }
-          // that.$store.dispatch('getData', evt)
         }
         ws.onerror = function (error) {
           console.log(error)
@@ -384,7 +400,7 @@
             width: 100%;
             height: 100%;
             .Device-list {
-              width: 45%;
+              width: 75%;
               margin: 10% auto;
               font-size: 1.2em;
               li {

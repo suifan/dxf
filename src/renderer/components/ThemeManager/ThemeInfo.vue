@@ -7,7 +7,7 @@
       </div>
       <div class="bottom">
         <span v-if="isTheme" class="vertical-middle">还未上传主题</span>
-        <span v-else class="vertical-middle">主题上传于{{ defaultTheme.uploadTime }}</span>
+        <span v-else class="vertical-middle">{{  defaultTheme.uploadTime }}</span>
       </div>
     </div>
     <div class="scene">
@@ -94,17 +94,17 @@
       <div class="top">
         <span class="online">
             <label class="circle" :class="{green: this.defaultDevice.connect, red: !this.defaultDevice.connect}"></label>
-            <label for="">{{ defaultDevice.localIP }}</label>
+            <label for="">{{ defaultDevice.ip }}</label>
           </span>
       </div>
       <div class="middle">
         <ul v-if="showList" class="">
           <li v-if="isScreenDevice">没有设备</li>
           <template v-else v-for="list in maxScreenList">
-            <li :class="{hostActive: defaultDevice.localIP === list.localIP}">
+            <li :class="{hostActive: defaultDevice.ip === list.ip}">
               <span class="iconfont icon-mac"></span>
-              &nbsp;{{ list.remark ? list.remark : list.localIP }}
-              &nbsp;&nbsp;&nbsp;<el-button v-if="defaultDevice.localIP != list.localIP" type="primary" size="mini" @click="toggle('device', list)">切换</el-button>
+              &nbsp;{{ list.note ? list.note : list.ip }}
+              &nbsp;&nbsp;&nbsp;<el-button v-if="defaultDevice.ip != list.ip" type="primary" size="mini" @click="toggle('device', list)">切换</el-button>
             </li>
           </template>
         </ul>
@@ -139,7 +139,7 @@
         themeList: this.$store.state.Theme.themeList,
         maxScreenList: this.$store.state.Device.maxScreenList,
         defaultDevice: {
-          localIP: "",
+          ip: "",
           remark: "",
           systemOS: '',
           deviceState: '',

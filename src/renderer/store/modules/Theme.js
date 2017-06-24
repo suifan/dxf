@@ -24,7 +24,7 @@ const getters = {
 
 const mutations = {
   pushThemeList (state, data) {
-    state.themeList.push(data)
+    state.themeList = data
   }
 }
 

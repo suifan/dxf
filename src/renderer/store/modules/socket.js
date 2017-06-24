@@ -1,4 +1,5 @@
 const state = {
+  ws: '',
   scoketConnect: false,
   totalData: ''
 }
@@ -6,6 +7,9 @@ const state = {
 const getters = {}
 
 const mutations = {
+  getws (state, ws) {
+    state.ws = ws
+  },
   setConn(state) {
     state.scoketConnect = true
   },
@@ -15,6 +19,9 @@ const mutations = {
 }
 
 const actions = {
+  getws({commit}, ws) {
+    commit('getws', ws)
+  },
   setConn({commit}) {
     commit('setConn')
   },
