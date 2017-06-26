@@ -86,8 +86,8 @@
           <div class="run-theme-list">
             <p class="title">运行的主题列表</p>
             <div class="list-content" id="runtheme">
-              <template v-for="item in runTheme">
-                <div @click="selectRunTheme($event, item)">
+              <template v-for="item,index in runTheme">
+                <div :key="index" @click="selectRunTheme($event, item)">
                   <!--<img :src="item.img" :alt="item.name" width="120">-->
                   <span>{{ item.name }}</span>
                   <el-button @click="preview" size="small">预览</el-button>
@@ -102,8 +102,8 @@
           <div class="theme-list">
             <p class="title">已有的主题列表</p>
             <div class="list-content" id="nowtheme">
-              <template v-for="item in theme">
-                <div @click="selectNowTheme($event, item)">
+              <template v-for="item,index in theme">
+                <div :key="index" @click="selectNowTheme($event, item)">
                   <!--<img :src="item.img" :alt="item.name" width="120">-->
                   <span>{{ item.name }}</span>
                   <el-button @click="preview" size="small">预览</el-button>
@@ -242,12 +242,14 @@
        **/
       importTheme () {
         let dom = document.getElementById('nowtheme')
-        let t_id = []
+        let t_id = [],_id = []
+        let ws = JSON.parse(localStorage.getItem('ws')) 
           if (this.sNowTheme.length != 0) {
             for(let i2 of this.sNowTheme) {
               let news = _.remove(this.theme, item => item.id === i2.id)
               this.runTheme = this.runTheme.concat(news)
-              t_id.push(i2.id)
+              t_id.push(i2)
+              _id.push(i2.id)
               for(let i3 of dom.childNodes) {
                 i3.className = ''
               }
@@ -257,14 +259,17 @@
               type: "changeTheme",
               data: {
                 id: this.selectdevice.id,
-								val: t_id.toString()
+                val: _id.toString(), 
+                ip: this.selectdevice.ip,
+								theme: t_id,
+                types: 'import'
               }
             }
             this.$store.dispatch('addThemes', {
               ip: this.selectdevice.ip,
 							themes: t_id
             })
-            // this.$store.state.socket.ws.send(JSON.stringify(msg))
+            this.$store.state.socket.ws.send(JSON.stringify(msg))
             this.sNowTheme = []
           }  
       },
@@ -273,12 +278,14 @@
        **/
       exportTheme () {
         let dom = document.getElementById('runtheme')
-        let t_id = []
+        let t_id = [],_id = []
+        let ws = JSON.parse(localStorage.getItem('ws')) 
           if (this.sRunTheme.length != 0) {
             for(let i2 of this.sRunTheme) {
               let news = _.remove(this.runTheme, item => item.id === i2.id)
               this.theme = this.theme.concat(news)
-              t_id.push(i2.id)
+              t_id.push(i2)
+              _id.push(i2.id)
               for(let i3 of dom.childNodes) {
                 i3.className = ''
               }
@@ -287,14 +294,17 @@
               type: "changeTheme",
               data: {
                 id: this.selectdevice.id,
-								val: t_id.toString()
+                val: _id.toString(), 
+                ip: this.selectdevice.ip,
+								theme: t_id,
+                types: 'export'
               }
             }
             this.$store.dispatch('delThemes', {
               ip: this.selectdevice.ip,
 							themes: t_id
             })
-            // this.$store.state.socket.ws.send(JSON.stringify(msg))
+            this.$store.state.socket.ws.send(JSON.stringify(msg))
             this.sRunTheme = []
           }  
         

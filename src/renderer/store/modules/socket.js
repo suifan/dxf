@@ -8,6 +8,7 @@ const getters = {}
 
 const mutations = {
   getws (state, ws) {
+    console.log(ws)
     state.ws = ws
   },
   setConn(state) {

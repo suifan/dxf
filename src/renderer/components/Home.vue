@@ -158,7 +158,7 @@
     mounted() {
       let companyID = localStorage.getItem('companyID')
       this.getItems()
-      // this.initSocket(`${this.$store.state.url.client}?company=${companyID}&type=client`)
+      this.initSocket(`${this.$store.state.url.client}?company=${companyID}&type=client`)
     },
     methods: {
       initSocket (url) {
@@ -181,10 +181,11 @@
             console.log('....////')
             console.log(received_msg.data)
           }
+          console.log("type:" + received_msg.type)
           //导入了运行的主题
-          // if (received_msg.type === "changeTheme") {
-          //   console.log('jszt')
-          // }
+          if (received_msg.type === "changeTheme") {
+            console.log('jszt')
+          }
           
           if(that.initCount === 1) {
             let MaxScreenList = [],

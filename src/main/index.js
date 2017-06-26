@@ -12,14 +12,14 @@ import os from 'os'
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static')
 } 
-
+     
 let mainWindow
 let contents
 let isMac 
-if (os.platform() === 'darwin') { 
+if (os.platform() === 'darwin') {   
   isMac = true
 }else {
-  isMac = false
+  isMac = false          
 }
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
