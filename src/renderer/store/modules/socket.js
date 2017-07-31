@@ -1,5 +1,5 @@
 const state = {
-  ws: '',
+  socket: null,
   scoketConnect: false,
   totalData: ''
 }
@@ -7,9 +7,8 @@ const state = {
 const getters = {}
 
 const mutations = {
-  getws (state, ws) {
-    console.log(ws)
-    state.ws = ws
+  getsocket (state, socket) {
+    state.socket = socket
   },
   setConn(state) {
     state.scoketConnect = true
@@ -20,8 +19,8 @@ const mutations = {
 }
 
 const actions = {
-  getws({commit}, ws) {
-    commit('getws', ws)
+  getsocket({commit}, socket) {
+    commit('getsocket', socket)
   },
   setConn({commit}) {
     commit('setConn')

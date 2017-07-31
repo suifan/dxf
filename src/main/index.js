@@ -26,11 +26,10 @@ const winURL = process.env.NODE_ENV === 'development'
   : `file://${__dirname}/index.html`
 
 function createWindow () {
-
   mainWindow = new BrowserWindow({
-    height: 600,
+    width: 1024,
+    height: 688,
     useContentSize: true,
-    width: 800,
     backgroundColor: '#373D41',
     frame: isMac ? true : false,
     titleBarStyle: isMac ? 'hidden' : 'show'
@@ -89,7 +88,7 @@ ipcMain.on('maximize', () => {
 // unmaximize
 ipcMain.on('unmaximize', () => {
   mainWindow.unmaximize()
-})
+})  
 ipcMain.on('platform', (event, arg) => {
   event.sender.send('isMac', isMac)
 })

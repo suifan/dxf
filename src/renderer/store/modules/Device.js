@@ -51,12 +51,14 @@ const mutations = {
   addThemes (state, data) {
     for (let i of state.maxScreenList) {
       let arr
-      if (i.themes === '' || i.themes.length === 1) {
+      if (i.themes == null) {
+        arr = []
+      }else if (i.themes === '' || i.themes.length === 1) {
         arr = i.themes.split('')
       }else {
         arr = i.themes.split(',')
       }
-      if (i.ip == data.ip) {
+      if (i.id == data.id) {
         i.themes = arr.concat(data.themes).toString()
       }
     }
@@ -64,12 +66,14 @@ const mutations = {
   delThemes (state, data) {
     for (let i of state.maxScreenList) {
       let arr
-      if (i.themes === '' || i.themes.length === 1) {
+      if (i.themes == null) {
+        arr = []
+      }else if (i.themes === '' || i.themes.length === 1) {
         arr = i.themes.split('')
       }else {
         arr = i.themes.split(',')
       }
-      if (i.ip == data.ip) {
+      if (i.id == data.id) {
         for (let i2 of data.themes) {
           _.remove(arr, n => n == i2)
         }

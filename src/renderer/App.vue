@@ -3,73 +3,89 @@
     <!--token: 04c1bbb660650da6fb970b46b66aa973e6774959-->
     <!--gistID: 70fc2d799d4e0bfb499919c3875c2843-->
     <titleBar></titleBar>
-    <div id="info-op0">{{ this.$store.state.InfoBar.info }}</div>
-    <nav>
-      <!-- 控制中心 -->
-      <div class="center">
-        <router-link to="/" active-class="link-active">
-          <span class="iconfont icon-voice curzz"></span>
-        </router-link>
-      </div>
-      <!-- 导航栏 -->
-      <div class="nav">
-        <!-- 信息栏：显示系统／其他的一些信息 -->
-        <div class="infoBar" id="infoBar">
-          <!-- 即时信息 -->
-          <div id="imsg" class=""></div>
-          <!-- 长久信息 -->
-          <div id="ltmsg"></div>
-        </div>
-        <!-- 右侧的信息、设置、头像-->
-        <div class="setting">
-          <div class="cell">
-            <span class="iconfont icon-message vertical-middle"></span>
-          </div>
-          <div class="">
-            <span class="iconfont icon-setting vertical-middle"></span>
-          </div>
-          <div class="user">
-            <span @click="signOut" class="glyphicon glyphicon-user vertical-middle"></span>
+    <div class="box">
+      <!-- 侧边栏菜单 -->
+      <div class="sidebar" id="sidebar">
+        <div @click="signout" class="user">
+          <div class="vertical-middle">
+            <div></div>
           </div>
         </div>
-      </div>
-    </nav>
-    <!-- 侧边栏菜单 -->
-    <div class="sidebar" id="sidebar">
-      <ul>
-        <!--<li>
-          <span class="iconfont icon-menu bule"></span>
-        </li>-->
-        <li>
-          <router-link to="/TM/ThemeUpload" active-class="link-active">
-            <span class="iconfont icon-upload" title="主题上传"></span>
+        <div class="change">
+          <span class="fa fa-hand-o-right fa-rotate-180 vertical-middle"></span>
+        </div>
+        <div class="router">
+          <div class="router-active"></div>
+          <div class="router-hover"></div>
+          <router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
+            @mouseout.native="mouseout($event)" to="/Home" active-class="link-active">
+            <div class="mask"></div>
+            <span class="fa fa-home fa-lg"></span>
+            <div class="title"><div class="triangle"></div> DashBoard</div>
           </router-link>
-        </li>
-        <li>
-          <router-link to="/TM/ThemeInfo" active-class="link-active">
+          
+          <router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
+            @mouseout.native="mouseout($event)" to="/DistributeUser"  active-class="link-active">
+            <div class="mask"></div>
+            <span class="iconfont icon-distribute" order="2"></span>
+            <div class="title"><div class="triangle"></div> 分配账号</div>
+          </router-link>
+
+          <!--<router-link to="/TM/ThemeInfo" active-class="link-active">
             <span class="iconfont icon-manager" title="主题信息"></span>
+          </router-link>-->
+  
+          <router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
+            @mouseout.native="mouseout($event)" to="/DeviceMonitor" active-class="link-active">
+            <div class="mask"></div>
+            <span class="iconfont icon-watch"></span>
+            <div class="title"><div class="triangle"></div> 设备监控</div>
           </router-link>
-        </li>
-        <li>
-          <router-link to="/DeviceMonitor" active-class="link-active">
-            <span class="iconfont icon-watch" title="设备监控"></span>
-          </router-link>  
-        </li>
-        <li>
-          <router-link to="/DataImport" active-class="link-active">
-            <span class="iconfont icon-import" title="数据导入"></span>
-          </router-link>  
-        </li>
-        <li>
-          <router-link to="/DataUpdate" active-class="link-active">
-            <span class="iconfont icon-update" title="数据修改"></span>
-          </router-link>  
-        </li>
-      </ul>
-    </div>
-    <!-- 主内容区域 -->
-    <div class="main">
-      <router-view></router-view>
+  
+          <router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
+            @mouseout.native="mouseout($event)" to="/DataImport" active-class="link-active">
+            <div class="mask"></div>
+            <span class="iconfont icon-import"></span>
+            <div class="title"><div class="triangle"></div> 数据导入</div>
+          </router-link>
+  
+          <router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
+            @mouseout.native="mouseout($event)" to="/DataUpdate" active-class="link-active">
+            <div class="mask"></div>
+            <span class="iconfont icon-update"></span>
+            <div class="title"><div class="triangle"></div> 数据修改</div>
+          </router-link>
+          
+          <router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
+            @mouseout.native="mouseout($event)" to="/TM/ThemeUpload" active-class="link-active">
+            <div class="mask"></div>
+            <span class="fa fa-upload fa-lg"></span>
+            <div class="title"><div class="triangle"></div> 主题上传</div>
+          </router-link>
+        </div>
+  
+        <div class="setting">
+          <nav id="gooey-v">
+            <input type="checkbox" class="menu-open" name="menu-open4" id="menu-open4" />
+            <label class="open-button" for="menu-open4">
+              <span class="burger burger-1"></span>
+              <span class="burger burger-2"></span>
+              <span class="burger burger-3"></span>
+            </label>
+            <a href="#" class="gooey-menu-item"> <i class="fa fa-train"></i> </a>
+            <a href="#" class="gooey-menu-item"> <i class="fa fa-bicycle"></i> </a>
+          </nav>
+        </div>
+  
+      </div>
+      <!-- 主内容区域 -->
+      <div class="main">
+        <transition>
+          <keep-alive>
+            <router-view></router-view>
+          </keep-alive>
+        </transition>
+      </div>
     </div>
   </div>
   <div v-else id="app" onselectstart="return true">
@@ -81,215 +97,327 @@
 </template>
 
 <script>
-import titleBar from './components/menu/titleBar'
-export default {
-  name: 'app',
-  data () {
-    return {
-      baseURI: '', //存储组件的路径
-      win: this.$electron.remote.BrowserWindow.win
-    }
-  },
-  components : {
-    titleBar
-  },
-  methods: {
-    //创建信息栏infobar上的即时信息
-    createIMsg (state) {
-      let BarMsg = document.createElement('span'),
-          progress = document.createElement('div'),
-          progressBar = document.createElement('div'),
-          imsg = document.getElementById('imsg') 
-      switch (state.stateCode) {
-        case 0:
-          BarMsg.className = 'iconfont icon-warning ib-imsg-warning ib-imsg-active-leave'
-          BarMsg.id = 'warning'
-          BarMsg.innerHTML = '：' + state.stateMsg
-          imsg.appendChild(BarMsg)
-          break;
-        case 1:
-          BarMsg.className = 'iconfont icon-error ib-imsg-error ib-imsg-active-leave'
-          BarMsg.id = 'error'
-          BarMsg.innerHTML = '：' + state.stateMsg
-          imsg.appendChild(BarMsg)
-          break;
-        case 2:
-          BarMsg.className = 'iconfont icon-success ib-imsg-success ib-imsg-active-leave'
-          BarMsg.id = 'success'
-          BarMsg.innerHTML = '：' + state.stateMsg
-          imsg.appendChild(BarMsg)
-          break; 
-        case 3:
-          progress.className = 'ib-imsg-progress'
-          progressBar.className = 'ib-imsg-progress-font progress-bar progress-bar-striped active'
-          progressBar.innerHTML = state.stateMsg
-          progressBar.style.width = state.stateMsg
-          progress.appendChild(progressBar)
-          imsg.appendChild(progress)
-          break;    
+  import titleBar from './components/menu/titleBar'
+  import './assets/js/jquery-2.1.3.min.js'
+  import './assets/js/gooey.min.js'
+  export default {
+    name: 'app',
+    data() {
+      return {
+        win: this.$electron.remote.BrowserWindow.win,
+        activeTop: 0, //激活的路由距离顶部的距离
+        tid: Number,//当鼠标悬停超过800ms就显示title
+        enter: 'animated slideInDown',
+        leave: 'animated slideOutDown'
       }
     },
-    //清除信息栏的即时信息
-    clearIMsg (state) {
-      let imsg = document.getElementById('imsg') 
-      let imsg_id = document.getElementById(state.stateType)
-      if (imsg_id) {
+    watch: {
+      '$route' (to, from) {
+        const toNum = to.name.split('_')[1]
+        const fromNum = from.name.split('_')[1]
+        if (toNum > fromNum) {
+          this.enter = 'animated inDown'
+          this.leave = 'animated fadeOutDown'
+        }else {
+          this.enter = 'animated fadeInUp'
+          this.leave = 'animated fadeOutUp'
+        }
+      }
+    },
+    components: {
+      titleBar
+    },
+    methods: {
+      signout() {
+        this.$store.dispatch('signout')
+        this.$router.push('Login')
+      },
+      clicks (e) {
+        let active = jnoos.$('.router-active'),
+            hover = jnoos.$('.router-hover'),
+            a = document.querySelectorAll('.router a'),
+            current = e.currentTarget
+        for(let i of a) {
+          i.style.color = '#737578'
+        }
+        clearInterval(this.tid)
+        this.order = Number(e.target.getAttribute('order'))
+        this.activeTop = e.currentTarget.offsetTop
+        e.currentTarget.style.color = '#ffffff'
+        // div.style.width = e.target.offsetWidth + 'px'
+        // div.style.height = e.target.offsetHeight + 'px'
+        active.style.top = e.currentTarget.offsetTop + 'px'
+        hover.style.top = e.currentTarget.offsetTop + 'px'
+      },
+      mouseover (e) {
+        let hover = jnoos.$('.router-hover'),
+            current = e.currentTarget
+        if (e.target.className != 'mask') {
+          return
+        }
+        if (jnoos.isNull(e.currentTarget.className)) {
+          e.currentTarget.style.color = '#FF6C60'
+        }
+        hover.style.top = e.currentTarget.offsetTop + 'px'
+        this.tid = setInterval(() => {
+          if (current.children[2].classList.length === 1) {
+            current.children[2].style.display = 'block'
+            current.children[2].classList.add('fadeInRight')
+            clearInterval(this.tid)
+          }
+        },400)    
+        
+      },
+      mouseout (e) {
+        let hover = jnoos.$('.router-hover'),
+            current = e.currentTarget
+        clearInterval(this.tid)
+        if (jnoos.isNull(e.currentTarget.className)) {
+          e.currentTarget.style.color = '#737578'
+        }
+        hover.style.top = this.activeTop + 'px'
+        if (e.currentTarget.children[2].classList.length === 1 ) {
+          return
+        }
+        e.currentTarget.children[2].classList.remove('fadeInRight')
+        e.currentTarget.children[2].classList.add('fadeOutRight')
         setTimeout(() => {
-          imsg.removeChild(imsg_id)
-          this.$store.dispatch('pushIMsg', '')
-        },2300)
+          current.children[2].style.display = 'none'
+          current.children[2].classList.remove('fadeOutRight')
+        }, 500)
+        
       }
     },
-    signOut () {
-      this.$store.dispatch('signOut')
-      this.win.setSize(800, 600)
-      this.win.center()
-      this.$router.options.routes[0].meta.requireAuth = true
-      this.$router.push('Login')
+    mounted() {
+      // $("#gooey-v").gooeymenu({
+      //   bgColor: "#68d099",
+			// 	contentColor: "white",
+			// 	style: "vertical",
+			// 	horizontal: {
+			// 		menuItemPosition: "glue"
+			// 	},
+			// 	vertical: {
+			// 		menuItemPosition: "spaced",
+			// 		direction: "up"
+			// 	},
+			// 	circle: {
+			// 		radius: 70
+			// 	},
+			// 	margin: "small",
+			// 	size: 40,
+			// 	bounce: true,
+			// 	bounceLength: "small",
+			// 	transitionStep: 300,
+			// 	hover: "#68d099"
+      // })
+    },
+    updated() {
+      // let state = this.$store.state
+      // if (this.baseURI === this.$el.baseURI) {
+      //   //路径对比,路由跳转的时候会改变路径
+      //   this.createIMsg(state.InfoBar.info.imsg)
+      //   this.clearIMsg(state.InfoBar.info.imsg)
+      // }
+      // this.baseURI = this.$el.baseURI
     }
-  },
-  mounted () {
-    
-  },
-  updated () {
-    let state = this.$store.state
-    if (this.baseURI === this.$el.baseURI) {
-      //路径对比,路由跳转的时候会改变路径
-        this.createIMsg(state.InfoBar.info.imsg)
-        this.clearIMsg(state.InfoBar.info.imsg) 
-    }
-    this.baseURI = this.$el.baseURI
   }
-}
 </script>
 
 <style lang="scss">
-@import './assets/scss/app.scss';
-#app {
-  width: 100%;
-  height: 100%;
-}
-
-.mainLogin {
-  width: 100%;
-  height: 100%;
-  background-color: rgb(51, 56, 66);
-}
-#info-op0 {
-  display: none
-}
-nav {
-  // position: relative;
-  // top: 22px;
-  height: 44px;
-  .center {
-    width: 52px;
-    height: inherit;
-    float: left;
-    background-color: #24292e;
-    border-bottom: 1px solid #000000;
-    border-right: 1px solid #000000;
-    text-align: center;
-    span {
-      color: #ffffff;
-      font-size: 1.4rem;
-      line-height: 44px;
-    }
-    a {
-      text-decoration: none;
-      outline: none;
-    }
+  @import './assets/scss/app.scss';
+  @import './assets/css/font-awesome.css';
+  @import './assets/css/gooey.min.css';
+  // @import 'animate.css';
+  #app {
+    width: 100%;
+    height: 100%;
   }
-  .nav {
+  
+  .mainLogin {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(51, 56, 66);
+  }
+  
+  #info-op0 {
+    display: none
+  }
+  
+  .box {
+    width: 100%;
+    height: 100%;
     display: flex;
-    background-color: #24292e;
-    .infoBar {
-      flex: 8;
-      position: relative;
-      width: 80%;
-      height: 44px;
-      text-align: center;
-      line-height: (44/16);
+  }
+  
+  .sidebar {
+    position: relative;
+    z-index: 1;
+    flex: .55;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #2c2c31;
+    box-shadow: 0 2px 10px 2px #0d0d17;
+    color: #AEB9C2;
+    transition: all .8s;
+    .user {
+      flex: .9;
+      border-bottom: 1px solid #000;
       div {
-        height: 100%;
+        width: 34px;
+        height: 34px;
+        border: 1px solid red;
+        border-bottom: 1px solid #2c2c31;
+        border-radius: 17px;
+        margin: auto;
+        div {
+          width: 30px;
+          height: 30px;
+          border-radius: 15px;
+          margin-left: 1px;
+          margin-top: 1px;
+          background: url('./assets/img/dxf.png');
+          background-size: contain;
+        }
       }
-      #imsg {
+    }
+    .change {
+      flex: .8;
+      text-align: center;
+      border-bottom: 1px solid #000;
+    }
+    .router {
+      position: relative;
+      flex: 6.3;
+      a {
         position: relative;
+        display: inline-block;
+        width: 100%;
+        height: 50px;
+        color: #737578;
+        line-height: 50px;
+        text-align: center;
+        transition: all .5s;
+        .mask {
+          position: absolute;
+          top: 0;
+          z-index: 99;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(255,255,255,0)
+        }
+        .title {
+          position: absolute;
+          z-index: 100;
+          top: 0;
+          left: 100%;
+          width: 100px;
+          display: none;
+          padding: 0 10px;
+          color: #FFFFFF;
+          opacity: 0;
+          background-color: rgba(120, 134, 152, 0.89);
+          .triangle {
+            position: absolute;
+            top: 19px;
+            left: -6px;
+            width: 0;
+            height: 0;
+            border-right: 6px solid rgba(120, 134, 152, 0.85);
+            border-bottom: 6px solid transparent;
+            border-top: 6px solid transparent;
+          }
+        }
+        .fadeInRight {
+          animation: fadeInRight .5s;
+          animation-fill-mode: both;
+        }
+        .fadeOutRight {
+          animation: fadeOutRight .5s;
+          animation-fill-mode: both;
+        }
+        @keyframes fadeInRight{
+          from {
+            opacity: 0;
+            transform: translate3d(50%, 0, 0);
+          }
+          to {
+            opacity: 1;
+            transform: none;
+          }
+        }
+        @keyframes fadeOutRight{
+          from {
+            opacity: 1;
+          }
+          to {
+            opacity: 0;
+            transform: translate3d(50%, 0, 0);
+          }
+        }
       }
-      #ltmsg {
+      .link-active {
+        color: #fff;
+        text-decoration: none;
+        transition: all 1s;
+      }
+       // router-link激活的样式
+      .router-active {
         position: absolute;
         top: 0;
-        width: 100%;
-        color: #fff;
+        left: 0;
+        width: 70px;
+        height: 50px;
+        z-index: -1;
+        background-color: #5bb5b6;
+        transition: all .5s;
+      }
+      .router-hover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 70px;
+        height: 50px;
+        z-index: -2;
+        background-color: #35404d;
+        transition: all .3s;
       }
     }
     .setting {
       flex: 2;
-      color: #F3F3F3;
-      text-align: center;
-      div {
-        display: inline-block;
-        width: 30%;
-        height: 40px;
-        span {
-          font-size: 1.3rem;
-          line-height: 44/(16*1.3)
-        }
-      }
+      width: 70px;
     }
   }
-}
-
-
-.sidebar {
-  width: 52px;
-  height: calc(100% - 44px);
-  float: left;
-  background-color: #24292e;
-  color: #AEB9C2;
-  transition: all .8s;
-  ul {
-    text-align: center;
-    li {
-      padding: 9px 2px;
-      a {
-        padding: 6px 12px;
-        color: #aeb1b3;
-        &:hover {
-          background-color: #35404d;
-          color: #FF6C60;
-          border-radius: 4px;
-          text-decoration: none;
-          outline: none;
-        }
-      }
-      .link-active {
-        border-radius: 4px;
-        background-color: #35404d;
-        color: #FF6C60;
-        text-decoration: none;
-      }
-      .bule {
-        &:hover {
-          cursor: pointer;
-        }
-      }
-      span {
-        font-size: 1.2rem;
-      }
-      .title {
-        font-size: .9rem;
-      }
+ 
+  .en-enter-active {
+    transition: all .8s ease;
+  }
+  .en-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .inDown {
+    animation: inDown 1s;
+    animation-fill-mode: both;
+  }
+  @keyframes inDown {   
+    from {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
     }
   }
-}
 
-.main {
-  position: relative;
-  width: auto;
-  height: calc(100% - 44px);
-  overflow-x: hidden;
-  overflow-y: auto;
-  background-color: #f1f2f7;
-}
+
+  .main {
+    flex: 9.45;
+    position: relative;
+    width: auto;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #292a2e;
+  }
 </style>

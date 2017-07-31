@@ -8,39 +8,49 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: '/',
       component: require('@/components/Home')
     },
     {
-      path: '/TM/ThemeInfo',
-      name: 'ThemeInfo',
-      component: require('@/components/ThemeManager/ThemeInfo')
+      path: '/Login',
+      name: 'Login_0',
+      component: require('@/components/login')
     },
     {
-      path: '/TM/ThemeUpload',
-      name: 'ThemeUpload',
-      component: require('@/components/ThemeManager/ThemeUpload')
+      path: '/Home',
+      name: 'Home_1',
+      component: require('@/components/Home')
+    },
+    {
+      path: '/DistributeUser',
+      name: 'DistributeUser_2',
+      component: require('@/components/distributeUser')
     },
     {
       path: '/DeviceMonitor',
-      name: 'DeviceMonitor',
+      name: 'DeviceMonitor_3',
       component: require('@/components/DeviceMonitor')
     },
     {
       path: '/DataImport',
-      name: 'DataImport',
+      name: 'DataImport_4',
       component: require('@/components/dataImport')
     },
     {
       path: '/DataUpdate',
-      name: 'DataUpdate',
-      component: require('@/components/dataImport')
+      name: 'DataUpdate_5',
+      component: require('@/components/dataUpdate')
     },
     {
-      path: '/Login',
-      name: 'Login',
-      component: require('@/components/login')
+      path: '/TM/ThemeUpload',
+      name: 'ThemeUpload_6',
+      component: require('@/components/ThemeManager/ThemeUpload')
     },
+    // {
+    //   path: '/TM/ThemeInfo',
+    //   name: 'ThemeInfo',
+    //   component: require('@/components/ThemeManager/ThemeInfo')
+    // },
     {
       path: '*',
       redirect: '/'

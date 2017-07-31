@@ -12,20 +12,20 @@ const getters = {
 }
 
 const mutations = {
-  doLogin (state) {
+  signin (state) {
     state.loginState = true
   },
-  signOut (state) {
+  signout (state) {
     state.loginState = false
   }
 }
 
 const actions = {
-  doLogin ({ commit }) {
-    commit('doLogin')
+  signin ({ commit }) {
+    commit('signin')
   },
-  signOut ({ commit }) {
-    commit('signOut')
+  signout ({ commit }) {
+    commit('signout')
   }
 }
 

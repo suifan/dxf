@@ -35,51 +35,27 @@
       closeMenu
     },
     methods: {
-      initSocket (url) {
-        let ws = new WebSocket(url),
-            that = this
-        ws.onopen = function () { 
-          console.log('连接成功！')
-        }
-        ws.onmessage = function (evt) {
-          let user = {}
-          user.name = this.name
-          user.pwd = this.pwd
-          let received_msg = JSON.parse(evt.data)
-          if(received_msg.code === 1000){
-            that.win.setSize(1024, 688)
-            that.win.center()
-            that.$router.push('/')
-            localStorage.setItem('user', JSON.stringify(user))
-            localStorage.setItem('companyID', received_msg.data)
-            that.$store.dispatch('doLogin')
-            ws.close()
-          }else{
-            console.log('用户名或密码错误!')
-          }
-          console.log(evt)
-          that.$store.dispatch('getData', evt)
-        }
-        ws.onerror = function (error) {
-          console.log(error)
-        }
-        ws.onclose = function () {
-          console.log('连接已断开!')
-        }
-      },
       login () {
-        let flag = this.$store.state.User.flag
-        let company = this.name.split("_")[0]
-        let user = this.name.split("_")[1]
-        let url = `${this.$store.state.url.login}?type=login&flag=${flag}&company=${company}&user=${user}&psw=${this.pwd}`
-        this.initSocket(url)
-
-       
-        // this.win.setSize(1024, 688)
-        // this.win.center()
-        // this.$router.options.routes[0].meta.requireAuth = false
-        // this.$router.push('/')
-        // this.$store.dispatch('doLogin', 1)
+        if (this.name == 'alf_admin' && this.pwd == 111) {
+          
+          let socket = io.connect("http://www.jnoos.com:7676?user=alf_admin&psw=111")
+            console.log(socket)
+          socket.on('login', e => {
+            let user = {}
+            user.name = this.name
+            user.pwd = this.pwd
+            if(e.code === 1000){
+              this.$router.push('/Home')
+              localStorage.setItem('user', JSON.stringify(user))
+              this.$store.dispatch('signin')
+            }
+          })
+          socket.on('disconnect', function () {
+            console.log("已断开连接")
+          })
+        }else {
+          console.log('密码错误')
+        }
       }
     },
     mounted () {

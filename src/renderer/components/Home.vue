@@ -29,7 +29,7 @@
           <div v-else class="device">
             <ul v-if="this.$store.getters.isControlDevice" class="Device-list">
               <template v-for="(list, key, index) in this.$store.state.Device.controlList">
-                <li>
+                <li :key="key">
                   <span class="iconfont icon-ipad"></span>
                   &nbsp;{{ list.ip }}
                   &nbsp;&nbsp;&nbsp;<el-button @click="seeControlDetails(list.connect)">查看详情</el-button>
@@ -82,8 +82,8 @@
               没有连接的设备
             </div>
             <ul v-else class="Device-list">
-              <template  v-for="list in this.$store.state.Device.maxScreenList">
-                <li>
+              <template  v-for="(list,index) in this.$store.state.Device.maxScreenList">
+                <li :key="index">
                   <span class="iconfont icon-mac"></span>
                   {{ list.note }} ({{ list.ip }})
                   &nbsp;&nbsp;&nbsp;<el-button @click="seeDetails(list.connect)">查看详情</el-button>
@@ -147,7 +147,13 @@
         isDeviceActive: true, //大屏终端导航栏激活状态 
         goSeeDetails: false,  //查看大屏终端的详情
         goSeeControlDetails: false,  //查看控制终端详情
-        initCount: 1
+        initCount: 1,
+        socket: null
+      }
+    },
+    watch: {
+      socket (val) {
+        console.log(val)
       }
     },
     components: {
@@ -156,61 +162,43 @@
       'ec-pie': pie
     },
     mounted() {
-      let companyID = localStorage.getItem('companyID')
       this.getItems()
-      this.initSocket(`${this.$store.state.url.client}?company=${companyID}&type=client`)
+      this.initSocket()
     },
     methods: {
-      initSocket (url) {
-        let ws = new WebSocket(url)
-        let that = this
-        ws.onopen = function () { 
-          console.log('连接成功！')
-          setTimeout(function() {
-            ws.send(JSON.stringify({
-              type: "receive"
-            }))
-          }, 5000);
-          that.$store.dispatch('getws', ws)
-          that.$store.dispatch('setConn')
-        }
-        ws.onmessage = function (evt) {
-          let received_msg = JSON.parse(evt.data)
-          //从主题客户端+控制台接入发送信息
-          if (received_msg.type === "deviceMsg") {
-            console.log('....////')
-            console.log(received_msg.data)
-          }
-          console.log("type:" + received_msg.type)
-          //导入了运行的主题
-          if (received_msg.type === "changeTheme") {
-            console.log('jszt')
-          }
-          
-          if(that.initCount === 1) {
+      initSocket () {
+        const addr="192.168.99.191:8072"
+        const socket = io.connect("http://"+addr+"?type=client")
+        this.$root.socket = socket
+        socket.on('connect', () => {
+          console.log('socket connect')
+          this.$store.dispatch('setConn')
+        })
+        socket.on('disconnected', e => {
+          console.log('socket close')
+        })
+        socket.on('changeTheme',function(e){
+          console.log(e)
+        })
+        socket.on('client', e => {
+          console.log(e)
+          if(this.initCount === 1) {
             let MaxScreenList = [],
                 ControlList = []
-            for (let i of received_msg.data.device) {
+            for (let i of e.data.device[0]) {
               i.connect = false
-              if (i.type === 'show') {
-                MaxScreenList.push(i)
-              }else {
-                ControlList.push(i)
-              }
+              MaxScreenList.push(i)
             }
-            console.log('MaxScreenList')
-            that.$store.dispatch('pushMaxScreenList', MaxScreenList)
-            that.$store.dispatch('pushControlList', ControlList)
-            that.$store.dispatch('pushThemeList', received_msg.data.theme)
-            that.initCount ++
+            for (let i of e.data.device[1]) {
+              i.connect = false
+              ControlList.push(i)
+            }
+            this.$store.dispatch('pushMaxScreenList', MaxScreenList)
+            this.$store.dispatch('pushControlList', ControlList)
+            this.$store.dispatch('pushThemeList', e.data.themes)
+            this.initCount ++
           }
-        }
-        ws.onerror = function (error) {
-          console.log(error)
-        }
-        ws.onclose = function () {
-          console.log('连接已断开!')
-        }
+        })
       },
       /**
        * 获取面板列表，并给每个item设置order

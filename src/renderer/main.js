@@ -5,6 +5,8 @@ import Element from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+require('./assets/js/jnoos')
+
 import App from './App'
 import router from './router'
 import store from './store'
@@ -15,13 +17,13 @@ Vue.config.productionTip = false
 
 Vue.use(Element)
   
-// if (localStorage.getItem('user')) {
-//   store.dispatch('doLogin')
-//   router.push('/')
-// }else {
-//   router.push('Login')
-// }
-store.dispatch('doLogin')
+if (localStorage.getItem('user')) {
+  store.dispatch('signin')
+  router.push('/Home')
+}else {
+  router.push('/Login')
+}
+// store.dispatch('doLogin')
 new Vue({
   components: { App },
   router,
@@ -29,7 +31,7 @@ new Vue({
   template: '<App/>',
   data () {
     return {
-      
+      socket: null
     }
   },
   mounted() {

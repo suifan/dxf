@@ -19,9 +19,9 @@
             <td>操作系统</td> 
             <td>设备状态</td>
           </tr>
-          <template v-for="list,index in maxScreenList">
-            <tr>
-              <td>{{ list.id }}</td>
+          <template v-for="(list,index) in maxScreenList">
+            <tr :key="index">
+              <td>{{ index + 1 }}</td>
               <td>{{ list.ip }}</td>
               <td>{{ list.note }}</td>
               <td>{{ list.device }}</td>
@@ -31,6 +31,8 @@
         </tbody>
       </table>
     </div>
+    <!-- 大屏终端结束 -->
+
     <!-- 控制台终端 -->
     <div class="panel">
       <div class="panel-body progress-panel bg-green">
@@ -50,9 +52,9 @@
             <td>设备类型</td> 
             <td>设备状态</td>
           </tr>
-          <template v-for="list,index in controlList">
-            <tr>
-              <td>{{ list.id }}</td>
+          <template v-for="(list,index) in controlList">
+            <tr :key="index">
+              <td>{{ index + 1 }}</td>
               <td>{{ list.ip }}</td>
               <td>{{ list.device }}</td>
               <td>{{ list.note }}</td>
@@ -62,6 +64,8 @@
         </tbody>
       </table>
     </div>
+    <!-- 控制台终端结束 -->
+
     <!-- 主题分配 -->
     <div class="panel">
       <div class="panel-body progress-panel bg-yellow">
@@ -71,14 +75,14 @@
       </div>
       <div class="distribution">
         <div class="Device">
-          <p class="title">设备列表</p> 
+          <p class="title">账户列表</p> 
           <ul v-if="!isDevice" class="Device-list">
-            <template v-for="list in maxScreenList">
-              <li @click="readThemeList($event, list)">{{ list.note ? list.note : list.ip }}</li>
+            <template v-for="(list,index) in maxScreenList">
+              <li @click="readThemeList($event, list)" :key="index">{{ list.name }}</li>
             </template>
           </ul>
           <div v-else class="NotDevice">
-            没有连接的设备
+            没有账户
           </div>
         </div>
 
@@ -86,11 +90,10 @@
           <div class="run-theme-list">
             <p class="title">运行的主题列表</p>
             <div class="list-content" id="runtheme">
-              <template v-for="item,index in runTheme">
+              <template v-for="(item,index) in runTheme">
                 <div :key="index" @click="selectRunTheme($event, item)">
                   <!--<img :src="item.img" :alt="item.name" width="120">-->
                   <span>{{ item.name }}</span>
-                  <el-button @click="preview" size="small">预览</el-button>
                 </div>
               </template>
             </div>
@@ -102,34 +105,26 @@
           <div class="theme-list">
             <p class="title">已有的主题列表</p>
             <div class="list-content" id="nowtheme">
-              <template v-for="item,index in theme">
+              <template v-for="(item,index) in theme">
                 <div :key="index" @click="selectNowTheme($event, item)">
                   <!--<img :src="item.img" :alt="item.name" width="120">-->
                   <span>{{ item.name }}</span>
-                  <el-button @click="preview" size="small">预览</el-button>
                 </div>
               </template>
             </div>
           </div>
         </div>
         <div v-else class="NotSelectDevice"> 
-          未选择设备
+          请先选择一个账户
         </div>
         
       </div>
     </div>
+    <!-- 主题分配结束 -->
   </div>
 </template>
 
 <script>
-  // var os = require('os');
-  // var IPv4, hostName;
-  // hostName = os.hostname();
-  // for (var i = 0; i < os.networkInterfaces().en0.length; i++) {
-  //   if (os.networkInterfaces().en0[i].family == 'IPv4') {
-  //     IPv4 = os.networkInterfaces().en0[i].address;
-  //   }
-  // }
   export default {
     data () {
       return {
@@ -152,7 +147,7 @@
       /**
        * 读取主题列表
        * @params  e: 当前元素
-       * @params  ip: 读取的设备IP
+       * @params  item
        **/
       readThemeList (e, item) {
         let children = e.target.parentNode.children
@@ -172,9 +167,9 @@
           }
           e.target.className = 'select'
           for(let i of this.runList) {
-            for(let i2 of i.id) {
+            for(let i2 of i.themeid) {
               for(let i3 of this.themeList) {
-                if (item.ip === i.ip) {
+                if (item.id === i.id) {
                   if (i2 == i3.id) {
                     runTheme.push(i3)
                   } 
@@ -243,35 +238,29 @@
       importTheme () {
         let dom = document.getElementById('nowtheme')
         let t_id = [],_id = []
-        let ws = JSON.parse(localStorage.getItem('ws')) 
-          if (this.sNowTheme.length != 0) {
-            for(let i2 of this.sNowTheme) {
-              let news = _.remove(this.theme, item => item.id === i2.id)
-              this.runTheme = this.runTheme.concat(news)
-              t_id.push(i2)
-              _id.push(i2.id)
-              for(let i3 of dom.childNodes) {
-                i3.className = ''
-              }
+        if (this.sNowTheme.length != 0) {
+          for(let i2 of this.sNowTheme) {
+            let news = _.remove(this.theme, item => item.id === i2.id)
+            this.runTheme = this.runTheme.concat(news)
+            t_id.push(i2)
+            _id.push(i2.id)
+            for(let i3 of dom.childNodes) {
+              i3.className = ''
             }
-           
-            let msg = {
-              type: "changeTheme",
-              data: {
-                id: this.selectdevice.id,
-                val: _id.toString(), 
-                ip: this.selectdevice.ip,
-								theme: t_id,
-                types: 'import'
-              }
-            }
-            this.$store.dispatch('addThemes', {
-              ip: this.selectdevice.ip,
-							themes: t_id
-            })
-            this.$store.state.socket.ws.send(JSON.stringify(msg))
-            this.sNowTheme = []
-          }  
+          }
+          
+          this.$store.dispatch('addThemes', {
+            id: this.selectdevice.id,
+            themes: _id
+          })
+          this.$root.socket.emit("changeTheme",{
+            type: "import",
+            id: this.selectdevice.id,
+            val: _id.toString(), 
+            theme: t_id
+          })
+          this.sNowTheme = []
+        }  
       },
       /**
        * 选中的主题导出到现有主题中
@@ -279,47 +268,47 @@
       exportTheme () {
         let dom = document.getElementById('runtheme')
         let t_id = [],_id = []
-        let ws = JSON.parse(localStorage.getItem('ws')) 
-          if (this.sRunTheme.length != 0) {
-            for(let i2 of this.sRunTheme) {
-              let news = _.remove(this.runTheme, item => item.id === i2.id)
-              this.theme = this.theme.concat(news)
-              t_id.push(i2)
-              _id.push(i2.id)
-              for(let i3 of dom.childNodes) {
-                i3.className = ''
-              }
+        if (this.sRunTheme.length != 0) {
+          for(let i2 of this.sRunTheme) {
+            let news = _.remove(this.runTheme, item => item.id === i2.id)
+            this.theme = this.theme.concat(news)
+            t_id.push(i2)
+            _id.push(i2.id)
+            for(let i3 of dom.childNodes) {
+              i3.className = ''
             }
-            let msg = {
-              type: "changeTheme",
-              data: {
-                id: this.selectdevice.id,
-                val: _id.toString(), 
-                ip: this.selectdevice.ip,
-								theme: t_id,
-                types: 'export'
-              }
-            }
-            this.$store.dispatch('delThemes', {
+          }
+          let msg = {
+            type: "changeTheme",
+            data: {
+              id: this.selectdevice.id,
+              val: _id.toString(), 
               ip: this.selectdevice.ip,
-							themes: t_id
-            })
-            this.$store.state.socket.ws.send(JSON.stringify(msg))
-            this.sRunTheme = []
-          }  
-        
-      },
-      preview (item) {
-        
+              theme: t_id,
+              types: 'export'
+            }
+          }
+          this.$store.dispatch('delThemes', {
+            id: this.selectdevice.id,
+            themes: _id
+          })
+          this.$root.socket.emit("changeTheme",{
+            type: "export",
+            id: this.selectdevice.id,
+            val: _id.toString(), 
+            theme: t_id
+          })
+          this.sRunTheme = []
+        }  
       }
     },
     computed: {
-      //大屏终端将药运行的主题列表
+      //大屏终端将要运行的主题列表
       ScreenRunTheme () {
         let arr = []
         for (let i of this.maxScreenList) {
           arr.push({
-            ip: i.ip,
+            id: i.id,
             runTheme: [],
             nowTheme: this.themeList.slice(0)
           })
@@ -329,10 +318,23 @@
       runList () {
         let arr = []
         for(let i of this.maxScreenList) {
-          arr.push({
-            ip: i.ip,
-            id: i.themes.split(',')
-          })
+          if (i.themes == null) {
+            arr.push({
+              id: i.id,
+              themeid: []
+            })
+          }else if (i.themes.length == 1) {
+            arr.push({
+              id: i.id,
+              themeid: i.themes.split('')
+            })
+          }else {
+            arr.push({
+              id: i.id,
+              themeid: i.themes.split(',')
+            })
+          }
+          
         } 
         return arr   
       }
@@ -343,10 +345,12 @@
 <style scoped lang="scss">
   .themeView {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     padding: 20px;
     .panel {
       text-align: center;
+      border: none;
+      border-radius: 5px;
       .panel-body {
         padding: 15px;
         border-radius: 5px 5px 0 0;

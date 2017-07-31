@@ -114,7 +114,8 @@ let rendererConfig = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.ProvidePlugin({
       _: 'lodash',
-      echarts: 'echarts'
+      echarts: 'echarts',
+      io: 'socket.io-client'
     }),
   ],
   output: {
