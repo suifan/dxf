@@ -76,12 +76,15 @@ export default {
       this.name = data.name
       this.pwd = data.pwd 
       this.describe = data.describe
+      console.log(data)
     },
     del (data) {
-      let _tableData = this.tableData.slice(0)
-      _.remove(_tableData, item => item.order === data.order)
+      let _tableData = this.tableData.slice(0),
+          _id
+      
+      _id = _.remove(_tableData, item => item.order === data.order)
       this.tableData = _tableData
-      this.$root.socket.emit("changeTheme",{id:i.id,type:"delete"})
+      this.$root.socket.emit("changeTheme",{id: _id.id,type:"delete"})
     },
     addUser () {
       if (jnoos.isNull(this.name) || jnoos.isNull(this.pwd) || jnoos.isNull(this.describe)) {
@@ -94,14 +97,17 @@ export default {
           note: this.describe
         })
         this.$root.socket.on('addUser', e => {
-          this.tableData.push({
+          let user = {
             id: e.id,
             order: this.tableData.length + 1,
             name: this.name,
             pwd: this.pwd,
             describe: this.describe
-          })
+          }
+          this.tableData.push(user)
+          this.$store.dispatch('addUser', {user: user})
         })
+
       }
     },
     editUser () {

@@ -4,6 +4,7 @@ const CLIENT_CONTROL = 2 //控制台
 
 const state = {
   loginState: false,
+  user: '',
   flag: CLIENT_BACKSTAG
 }
 
@@ -17,6 +18,12 @@ const mutations = {
   },
   signout (state) {
     state.loginState = false
+  },
+  initUser (state, payload) {
+    state.user = payload.user
+  },
+  addUser (state, payload) {
+    state.user = payload.user
   }
 }
 
@@ -26,6 +33,12 @@ const actions = {
   },
   signout ({ commit }) {
     commit('signout')
+  },
+  initUser ({ commit }, payload) {
+    commit('initUser', payload.user)
+  },
+  addUser ({ commit }, payload) {
+    commit('addUser', payload.user)
   }
 }
 

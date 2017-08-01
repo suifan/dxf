@@ -181,18 +181,29 @@
           console.log(e)
         })
         socket.on('client', e => {
-          console.log(e)
           if(this.initCount === 1) {
             let MaxScreenList = [],
-                ControlList = []
+                ControlList = [],
+                user = [],
+                count = 0
             for (let i of e.data.device[0]) {
               i.connect = false
+              count++
               MaxScreenList.push(i)
+              user.push({
+                id: i.id,
+                order: count,
+                name: i.name,
+                pwd: i.psw,
+                describe: i.note
+              })
             }
             for (let i of e.data.device[1]) {
               i.connect = false
               ControlList.push(i)
             }
+            console.log(user)
+            this.$store.dispatch('initUser', {user: user})
             this.$store.dispatch('pushMaxScreenList', MaxScreenList)
             this.$store.dispatch('pushControlList', ControlList)
             this.$store.dispatch('pushThemeList', e.data.themes)
@@ -404,10 +415,12 @@
           }
           .device {
             width: 100%;
-            height: 100%;
+            height: 76%;
+            margin-top: 5%;
+            overflow: auto;
             .Device-list {
               width: 75%;
-              margin: 10% auto;
+              margin: auto;
               font-size: 1.2em;
               li {
                 height: 40px;
