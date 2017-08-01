@@ -35,7 +35,7 @@
     components: {
       closeMenu
     },
-    methods: {
+    methods: { 
       login () {
         const that = this
         axios.get(`http://www.jnoos.com:7676/login?user=${this.name}&psw=${this.pwd}`)
