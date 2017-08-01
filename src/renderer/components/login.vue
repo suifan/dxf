@@ -21,6 +21,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   const closeMenu = require('../components/menu/close-menu')
   export default {
     name: 'login',
@@ -36,26 +37,24 @@
     },
     methods: {
       login () {
-        if (this.name == 'alf_admin' && this.pwd == 111) {
-          
-          let socket = io.connect("http://www.jnoos.com:7676?user=alf_admin&psw=111")
-            console.log(socket)
-          socket.on('login', e => {
+        const that = this
+        axios.get(`http://www.jnoos.com:7676/login?user=${this.name}&psw=${this.pwd}`)
+        .then(function (response) {
+          if(response.data.code == 1005) {
+            alert('用户名或密码错误')
+          }
+          if(response.data.code == 1000) {
             let user = {}
-            user.name = this.name
-            user.pwd = this.pwd
-            if(e.code === 1000){
-              this.$router.push('/Home')
-              localStorage.setItem('user', JSON.stringify(user))
-              this.$store.dispatch('signin')
-            }
-          })
-          socket.on('disconnect', function () {
-            console.log("已断开连接")
-          })
-        }else {
-          console.log('密码错误')
-        }
+            user.name = that.name
+            user.pwd = that.pwd
+            that.$router.push('/Home')
+            localStorage.setItem('user', JSON.stringify(user))
+            that.$store.dispatch('signin')
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
       }
     },
     mounted () {
