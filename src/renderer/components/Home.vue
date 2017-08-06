@@ -148,12 +148,6 @@
         goSeeDetails: false,  //查看大屏终端的详情
         goSeeControlDetails: false,  //查看控制终端详情
         initCount: 1,
-        socket: null
-      }
-    },
-    watch: {
-      socket (val) {
-        console.log(val)
       }
     },
     components: {
@@ -173,42 +167,44 @@
         socket.on('connect', () => {
           console.log('socket connect')
           this.$store.dispatch('setConn')
+          socket.emit("receive",{})
         })
         socket.on('disconnected', e => {
           console.log('socket close')
         })
-        socket.on('changeTheme',function(e){
+        // socket.on('changeTheme', e => {
+        //   console.log(e)
+        // })
+        socket.on('deviceMsg', e => {
           console.log(e)
         })
         socket.on('client', e => {
-          if(this.initCount === 1) {
-            let MaxScreenList = [],
-                ControlList = [],
-                user = [],
-                count = 0
-            for (let i of e.data.device[0]) {
-              i.connect = false
-              count++
-              MaxScreenList.push(i)
-              user.push({
-                id: i.id,
-                order: count,
-                name: i.name,
-                pwd: i.psw,
-                describe: i.note
-              })
-            }
-            for (let i of e.data.device[1]) {
-              i.connect = false
-              ControlList.push(i)
-            }
-            console.log(user)
-            this.$store.dispatch('initUser', {user: user})
-            this.$store.dispatch('pushMaxScreenList', MaxScreenList)
-            this.$store.dispatch('pushControlList', ControlList)
-            this.$store.dispatch('pushThemeList', e.data.themes)
-            this.initCount ++
+          console.log(e)
+          let MaxScreenList = [],
+              ControlList = [],
+              user = [],
+              count = 0
+          for (let i of e.data.themeCtrl) {
+            // i.connect = false
+            count++
+            MaxScreenList.push(i)
+            user.push({
+              id: i.id,
+              order: count,
+              name: i.name,
+              pwd: i.psw,
+              describe: i.note
+            })
           }
+          for (let i of e.data.ctrl) {
+            i.connect = false
+            ControlList.push(i)
+          }
+          this.$store.dispatch('initUser', {user: user})
+          this.$store.dispatch('pushMaxScreenList', MaxScreenList)
+          this.$store.dispatch('pushControlList', ControlList)
+          this.$store.dispatch('pushThemeList', e.data.theme)
+          this.$store.dispatch('pushVideoList', e.data.video)
         })
       },
       /**

@@ -7,7 +7,7 @@
           <span class="iconfont icon-mac"></span> 大屏终端
         </div>
         <div class="counter">
-          设备数量: {{ maxScreenList.length }}
+          设备数量: {{ this.$store.state.Device.maxScreenList.length }}
         </div>
       </div>
       <table class="table table-hover personal-task">
@@ -19,7 +19,7 @@
             <td>操作系统</td> 
             <td>设备状态</td>
           </tr>
-          <template v-for="(list,index) in maxScreenList">
+          <template v-for="(list,index) in this.$store.state.Device.maxScreenList">
             <tr :key="index">
               <td>{{ index + 1 }}</td>
               <td>{{ list.ip }}</td>
@@ -77,7 +77,7 @@
         <div class="Device">
           <p class="title">账户列表</p> 
           <ul v-if="!isDevice" class="Device-list">
-            <template v-for="(list,index) in maxScreenList">
+            <template v-for="(list,index) in this.$store.state.Device.maxScreenList">
               <li @click="readThemeList($event, list)" :key="index">{{ list.name }}</li>
             </template>
           </ul>
@@ -142,6 +142,9 @@
     },
     mounted () {
       // this.rts()
+      // this.$root.socket.on('addUser', e => {
+      //   this.$store.state.User.user
+      // })
     },
     methods: {
       /**
@@ -306,7 +309,7 @@
       //大屏终端将要运行的主题列表
       ScreenRunTheme () {
         let arr = []
-        for (let i of this.maxScreenList) {
+        for (let i of this.$store.state.Device.maxScreenList) {
           arr.push({
             id: i.id,
             runTheme: [],
@@ -317,7 +320,7 @@
       },
       runList () {
         let arr = []
-        for(let i of this.maxScreenList) {
+        for(let i of this.$store.state.Device.maxScreenList) {
           if (i.themes == null) {
             arr.push({
               id: i.id,

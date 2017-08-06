@@ -59,7 +59,7 @@ export default {
       describe: '',
       state: 'add',
       currentData: Object,
-      tableData: []
+      tableData: this.$store.state.User.user
     }
   },
   mounted () {
@@ -67,26 +67,34 @@ export default {
    
   },
   methods: {
-    sort (a, b) {
-      return a > b
-    },
     edit (data) {
       this.state = 'edit'
       this.currentData = data
       this.name = data.name
       this.pwd = data.pwd 
       this.describe = data.describe
-      console.log(data)
     },
     del (data) {
       let _tableData = this.tableData.slice(0),
-          _id
-      
-      _id = _.remove(_tableData, item => item.order === data.order)
+          _maxScreenList = this.$store.state.Device.maxScreenList.slice(0),
+          count = 0
+      _.remove(_tableData, item => item.order === data.order)
+      _.remove(_maxScreenList, item => item.id === data.id)
+      for(let i of _tableData) {
+        count++
+        i.order = count
+      }
+      for(let i of _maxScreenList) {
+        count++
+        i.order = count
+      }
+      this.$store.dispatch('delUser',{user: _tableData})
+      this.$store.dispatch('pushMaxScreenList', _maxScreenList)
       this.tableData = _tableData
-      this.$root.socket.emit("changeTheme",{id: _id.id,type:"delete"})
+      this.$root.socket.emit("changeTheme",{id: data.id,type:"delete"})
     },
     addUser () {
+      let _maxScreenList = this.$store.state.Device.maxScreenList.slice(0)
       if (jnoos.isNull(this.name) || jnoos.isNull(this.pwd) || jnoos.isNull(this.describe)) {
         alert('不能为空')
       }else {
@@ -98,28 +106,61 @@ export default {
         })
         this.$root.socket.on('addUser', e => {
           let user = {
-            id: e.id,
+            id: e.data.id,
             order: this.tableData.length + 1,
             name: this.name,
             pwd: this.pwd,
             describe: this.describe
           }
-          this.tableData.push(user)
+          // this.tableData.push(user)
+          _maxScreenList.push(e.data)
+          console.log(e)
+          this.name = ''
+          this.pwd = ''
+          this.describe = ''
           this.$store.dispatch('addUser', {user: user})
+          this.$store.dispatch('pushMaxScreenList', _maxScreenList)
         })
-
       }
     },
     editUser () {
+
+      let _tableData = this.tableData.slice(0),
+          _editData = jnoos.deepcopy(this.currentData),
+          _maxScreenList = this.$store.state.Device.maxScreenList.slice(0),
+          count = 0
+      let index = _.findIndex(_maxScreenList, item => item.id === _editData.id)    
+      console.log(_maxScreenList[index])
       if (this.name != this.currentData.name) {
-        this.$root.socket.emit("changeTheme",{id:i.id,type:"name",val:this.name})
+        _editData.name = this.name
+        _maxScreenList[index].name = this.name
+        this.$root.socket.emit("changeTheme",{id: this.currentData.id,type:"name",val:this.name})
+        count ++
       }
       if (this.pwd != this.currentData.pwd) {
-        this.$root.socket.emit("changeTheme",{id:i.id,type:"psw",val:this.pwd})
+        _editData.pwd = this.pwd
+        _maxScreenList[index].pwd = this.pwd
+        this.$root.socket.emit("changeTheme",{id: this.currentData.id,type:"psw",val:this.pwd})
+        count ++
       }
       if (this.describe != this.currentData.describe) {
-        this.$root.socket.emit("changeTheme",{id:i.id,type:"note",val:this.describe})
+        _editData.describe = this.describe
+        _maxScreenList[index].note = this.describe
+        this.$root.socket.emit("changeTheme",{id: this.currentData.id,type:"note",val:this.describe})
+        count ++
       }
+      if (count != 0) {
+        _tableData[_editData.order - 1] = _editData
+        this.$store.dispatch('editUser',{user: _tableData})
+        this.$store.dispatch('pushMaxScreenList', _maxScreenList)
+        this.tableData = _tableData
+      }
+      this.name = ''
+      this.pwd = ''
+      this.describe = ''
+      this.state = 'add'
+      _tableData = []
+      _editData = []
     }
   },
 }

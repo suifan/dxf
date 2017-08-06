@@ -1,34 +1,9 @@
 const state = { 
   maxScreenList: [    //大屏列表
-    {
-      "id": 1,
-      "ip": "192.168.147.116",
-      "note": "大厅大屏",
-      "device": "windows",
-      "type": "show",
-      "themes": "1,2",
-      "memberId": 1
-    },
-    {
-      "id": 3,
-      "ip": "192.168.147.103",
-      "note": "董事长电脑",
-      "device": "windows",
-      "type": "show",
-      "themes": "1",
-      "memberId": 1
-    }
+
   ],
   controlList: [  //控制端列表
-    {
-      "id": 2,
-      "ip": "192.168.147.118",
-      "note": "平板",
-      "device": "IOS",
-      "type": "ctrl",
-      "themes": "",
-      "memberId": 1
-    }
+
   ]
 }
 
@@ -48,6 +23,7 @@ const mutations = {
   pushControlList (state, data) {
     state.controlList = data
   },
+  //为账户添加主题
   addThemes (state, data) {
     for (let i of state.maxScreenList) {
       let arr
@@ -63,6 +39,7 @@ const mutations = {
       }
     }
   },
+  //删除已添加的主题
   delThemes (state, data) {
     for (let i of state.maxScreenList) {
       let arr
@@ -82,6 +59,7 @@ const mutations = {
       }
     }
   },
+  //
   maxScreenGoOnline (state, ip) {
     for(let i of state.maxScreenList) {
       if(_.get(i, 'ip') === ip) {

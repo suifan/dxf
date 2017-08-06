@@ -28,7 +28,7 @@ const winURL = process.env.NODE_ENV === 'development'
 function createWindow () {
   mainWindow = new BrowserWindow({
     width: 1024,
-    height: 688,
+    height: 768,
     useContentSize: true,
     backgroundColor: '#373D41',
     frame: isMac ? true : false,

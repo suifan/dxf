@@ -23,6 +23,12 @@ const mutations = {
     state.user = payload.user
   },
   addUser (state, payload) {
+    state.user.push(payload.user) 
+  },
+  delUser (state, payload) {
+    state.user = payload.user
+  },
+  editUser (state, payload) {
     state.user = payload.user
   }
 }
@@ -35,10 +41,16 @@ const actions = {
     commit('signout')
   },
   initUser ({ commit }, payload) {
-    commit('initUser', payload.user)
+    commit('initUser', payload)
   },
   addUser ({ commit }, payload) {
-    commit('addUser', payload.user)
+    commit('addUser', payload)
+  },
+  delUser ({ commit }, payload) {
+    commit('delUser', payload)
+  },
+  editUser ({ commit }, payload) {
+    commit('editUser', payload)
   }
 }
 

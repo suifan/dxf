@@ -37,22 +37,21 @@
     },
     methods: { 
       login () {
-        const that = this
         axios.get(`http://www.jnoos.com:7676/login?user=${this.name}&psw=${this.pwd}`)
-        .then(function (response) {
+        .then( response => {
           if(response.data.code == 1005) {
             alert('用户名或密码错误')
           }
           if(response.data.code == 1000) {
             let user = {}
-            user.name = that.name
-            user.pwd = that.pwd
-            that.$router.push('/Home')
+            user.name = this.name
+            user.pwd = this.pwd
+            this.$router.push('/Home')
             localStorage.setItem('user', JSON.stringify(user))
-            that.$store.dispatch('signin')
+            this.$store.dispatch('signin')
           }
         })
-        .catch(function (error) {
+        .catch( error => {
           console.log(error)
         })
       }

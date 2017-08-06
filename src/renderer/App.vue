@@ -60,7 +60,7 @@
             @mouseout.native="mouseout($event)" to="/TM/ThemeUpload" active-class="link-active">
             <div class="mask"></div>
             <span class="fa fa-upload fa-lg"></span>
-            <div class="title"><div class="triangle"></div> 主题上传</div>
+            <div class="title"><div class="triangle"></div> 文件上传</div>
           </router-link>
         </div>
   
