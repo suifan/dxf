@@ -14,7 +14,7 @@ if (process.env.NODE_ENV !== 'development') {
 } 
      
 let mainWindow
-let contents
+let contents 
 let isMac 
 if (os.platform() === 'darwin') {   
   isMac = true

@@ -8,12 +8,7 @@ const state = {
 }
 
 const getters = {
-  isScreenDevice: state => {   //有没有大屏终端设备
-    return state.maxScreenList.length === 0 ? true : false
-  },
-  isControlDevice: state => {  //有没有控制终端设备
-    return state.controlList.length != 0 ? true : false
-  }
+
 }
 
 const mutations = {

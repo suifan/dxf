@@ -10,7 +10,7 @@
           设备数量: {{ this.$store.state.Device.maxScreenList.length }}
         </div>
       </div>
-      <table class="table table-hover personal-task">
+      <table v-if="this.$store.state.Device.maxScreenList.length == 0 ? false : true" class="table table-hover personal-task">
         <tbody>
           <tr>
             <td>序号</td>
@@ -27,14 +27,21 @@
               <td>{{ list.device }}</td>
               <td>{{ list.connect ? "在线" : "离线" }}</td>
             </tr>
-          </template>
+          </template>  
         </tbody>
+      </table>
+      <table v-else class="table table-hover personal-task">
+        <tbody>   
+          <tr>
+            <td>没有数据</td>
+          </tr>
+        </tbody>  
       </table>
     </div>
     <!-- 大屏终端结束 -->
 
     <!-- 控制台终端 -->
-    <div class="panel">
+    <!--<div class="panel">
       <div class="panel-body progress-panel bg-green">
         <div class="panel-task">
           <span class="iconfont icon-ipad"></span> 控制终端
@@ -43,7 +50,7 @@
           设备数量: {{ controlList.length }}
         </div>
       </div>
-      <table class="table table-hover personal-task">
+      <table v-if="isControlDevice" class="table table-hover personal-task">
         <tbody>
           <tr>
             <td>序号</td>
@@ -63,7 +70,14 @@
           </template>
         </tbody>
       </table>
-    </div>
+      <table v-else class="table table-hover personal-task">
+        <tbody>   
+          <tr>
+            <td>没有数据</td>
+          </tr>
+        </tbody>  
+      </table>
+    </div>-->
     <!-- 控制台终端结束 -->
 
     <!-- 主题分配 -->
@@ -75,14 +89,14 @@
       </div>
       <div class="distribution">
         <div class="Device">
-          <p class="title">账户列表</p> 
+          <p class="title">账号列表</p> 
           <ul v-if="!isDevice" class="Device-list">
             <template v-for="(list,index) in this.$store.state.Device.maxScreenList">
               <li @click="readThemeList($event, list)" :key="index">{{ list.name }}</li>
             </template>
           </ul>
           <div v-else class="NotDevice">
-            没有账户
+            没有账号
           </div>
         </div>
 
@@ -115,7 +129,7 @@
           </div>
         </div>
         <div v-else class="NotSelectDevice"> 
-          请先选择一个账户
+          请先选择一个账号
         </div>
         
       </div>
@@ -349,11 +363,12 @@
   .themeView {
     width: 100%;
     // height: 100%;
-    padding: 20px;
+    padding: 40px 20px;
     .panel {
       text-align: center;
       border: none;
       border-radius: 5px;
+      margin-bottom: 40px;
       .panel-body {
         padding: 15px;
         border-radius: 5px 5px 0 0;

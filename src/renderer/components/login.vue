@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  
   const closeMenu = require('../components/menu/close-menu')
   export default {
     name: 'login',
@@ -37,7 +37,7 @@
     },
     methods: { 
       login () {
-        axios.get(`http://www.jnoos.com:7676/login?user=${this.name}&psw=${this.pwd}`)
+        this.$http.get(`http://www.jnoos.com:7676/login?user=${this.name}&psw=${this.pwd}`)
         .then( response => {
           if(response.data.code == 1005) {
             alert('用户名或密码错误')

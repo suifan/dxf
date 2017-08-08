@@ -86,9 +86,8 @@
                 <li :key="index">
                   <span class="iconfont icon-mac"></span>
                   {{ list.note }} ({{ list.ip }})
-                  &nbsp;&nbsp;&nbsp;<el-button @click="seeDetails(list.connect)">查看详情</el-button>
-                  <el-button v-if="list.connect" type="success">{{ list.connect ? "在线" : "离线" }}</el-button>
-                  <el-button v-else type="danger">{{ list.connect ? "在线" : "离线" }}</el-button>
+                  &nbsp;&nbsp;&nbsp;<el-button @click="seeDetails(list.online)">查看详情</el-button>
+                  <!--<el-button type="success">{{ list.online ? "在线" : "离线" }}</el-button>-->
                 </li>
               </template>
             </ul>
@@ -161,7 +160,7 @@
     },
     methods: {
       initSocket () {
-        const addr="192.168.99.191:8072"
+        const addr = "192.168.99.191:8072"
         const socket = io.connect("http://"+addr+"?type=client")
         this.$root.socket = socket
         socket.on('connect', () => {
@@ -177,6 +176,14 @@
         // })
         socket.on('deviceMsg', e => {
           console.log(e)
+          // for (let i of this.$store.state.Device.maxScreenList) {
+          //   if (e.data.id == i.id) {
+          //     i.online = e.data.online
+          //   }
+          // }
+        })
+        socket.on('themeConn', e => {
+          console.log(e)
         })
         socket.on('client', e => {
           console.log(e)
@@ -185,7 +192,7 @@
               user = [],
               count = 0
           for (let i of e.data.themeCtrl) {
-            // i.connect = false
+            i.online = false
             count++
             MaxScreenList.push(i)
             user.push({
@@ -196,13 +203,13 @@
               describe: i.note
             })
           }
-          for (let i of e.data.ctrl) {
-            i.connect = false
-            ControlList.push(i)
-          }
+          // for (let i of e.data.ctrl) {
+          //   i.online = false
+          //   ControlList.push(i)
+          // }
           this.$store.dispatch('initUser', {user: user})
           this.$store.dispatch('pushMaxScreenList', MaxScreenList)
-          this.$store.dispatch('pushControlList', ControlList)
+          // this.$store.dispatch('pushControlList', ControlList)
           this.$store.dispatch('pushThemeList', e.data.theme)
           this.$store.dispatch('pushVideoList', e.data.video)
         })
@@ -277,11 +284,11 @@
         if (msg) {
           this.goSeeDetails = true
         }else {
-          this.$store.dispatch('pushIMsg', {
-            stateCode: 0,
-            stateType: 'warning',
-            stateMsg: '离线状态下无法查看详情!'
-          })
+          // this.$store.dispatch('pushIMsg', {
+          //   stateCode: 0,
+          //   stateType: 'warning',
+          //   stateMsg: '离线状态下无法查看详情!'
+          // })
         }
       },
       /**
@@ -371,7 +378,7 @@
         }
         .content {
           position: relative;
-          height: calc(100% - 25px - 52px);
+          // height: calc(100% - 25px - 52px);
           .NotDevice {
             height: 100%;
             line-height: 20
@@ -415,13 +422,14 @@
             margin-top: 5%;
             overflow: auto;
             .Device-list {
-              width: 75%;
+              width: 50%;
               margin: auto;
               font-size: 1.2em;
               li {
                 height: 40px;
                 line-height: 40px;
                 margin-bottom: 30px;
+                text-align: left;
               }
             }
           }

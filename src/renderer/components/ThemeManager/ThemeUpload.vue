@@ -33,8 +33,11 @@
         <pre style="width: 400px;background-color: #fff" contenteditable="false">
     <code style="font-weight: bold">#</code>主题上传的项目结构如下
       xxx.zip(压缩包)
-      ├─ xxx(文件夹)
+      ├─ static(文件夹)
       ├   ├─ 项目的资源文件(js/css/video/font等)
+      ├─ control(控制页面)
+      ├   ├─ control的资源文件夹(js/css/video/font等)
+      ├   ├─ index.html
       ├─ <code style="color: red">theme.png (主题界面的截图)</code>
       └─ <code style="color: red">index.html</code>
     ⚠️<code style="color: #e28408">注：必须遵循以上结构！一个压缩包和一张主题界面的截图!</code>    

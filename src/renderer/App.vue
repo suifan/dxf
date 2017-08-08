@@ -11,9 +11,9 @@
             <div></div>
           </div>
         </div>
-        <div class="change">
+        <!--<div class="change">
           <span class="fa fa-hand-o-right fa-rotate-180 vertical-middle"></span>
-        </div>
+        </div>-->
         <div class="router">
           <div class="router-active"></div>
           <div class="router-hover"></div>
@@ -42,12 +42,12 @@
             <div class="title"><div class="triangle"></div> 设备监控</div>
           </router-link>
   
-          <router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
+          <!--<router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
             @mouseout.native="mouseout($event)" to="/DataImport" active-class="link-active">
             <div class="mask"></div>
             <span class="iconfont icon-import"></span>
             <div class="title"><div class="triangle"></div> 数据导入</div>
-          </router-link>
+          </router-link>-->
   
           <router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
             @mouseout.native="mouseout($event)" to="/DataUpdate" active-class="link-active">
@@ -65,7 +65,7 @@
         </div>
   
         <div class="setting">
-          <nav id="gooey-v">
+          <!--<nav id="gooey-v">
             <input type="checkbox" class="menu-open" name="menu-open4" id="menu-open4" />
             <label class="open-button" for="menu-open4">
               <span class="burger burger-1"></span>
@@ -74,7 +74,7 @@
             </label>
             <a href="#" class="gooey-menu-item"> <i class="fa fa-train"></i> </a>
             <a href="#" class="gooey-menu-item"> <i class="fa fa-bicycle"></i> </a>
-          </nav>
+          </nav>-->
         </div>
   
       </div>
@@ -129,8 +129,8 @@
     },
     methods: {
       signout() {
-        this.$store.dispatch('signout')
-        this.$router.push('Login')
+        // this.$store.dispatch('signout')
+        // this.$router.push('Login')
       },
       clicks (e) {
         let active = jnoos.$('.router-active'),

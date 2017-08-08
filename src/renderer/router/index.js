@@ -31,19 +31,19 @@ export default new Router({
       name: 'DeviceMonitor_3',
       component: require('@/components/DeviceMonitor')
     },
-    {
-      path: '/DataImport',
-      name: 'DataImport_4',
-      component: require('@/components/dataImport')
-    },
+    // {
+    //   path: '/DataImport',
+    //   name: 'DataImport_4',
+    //   component: require('@/components/dataImport')
+    // },
     {
       path: '/DataUpdate',
-      name: 'DataUpdate_5',
+      name: 'DataUpdate_4',
       component: require('@/components/dataUpdate')
     },
     {
       path: '/TM/ThemeUpload',
-      name: 'ThemeUpload_6',
+      name: 'ThemeUpload_5',
       component: require('@/components/ThemeManager/ThemeUpload')
     },
     // {
