@@ -28,13 +28,15 @@ const winURL = process.env.NODE_ENV === 'development'
 function createWindow () {
   let height
   if(screen.getPrimaryDisplay().size.height<=768) {
-    height = 700
+    height = 720
   }else {
     height = 768
   }
   mainWindow = new BrowserWindow({
     width: 1024,
     height: height,
+    minWidth: 768,
+    minHeight: 720,
     useContentSize: true,
     // backgroundColor: '#80FFFF33',
     transparent: true,

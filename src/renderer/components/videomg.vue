@@ -11,7 +11,6 @@
       
     </div>
     <div class="pocket">
-      <div class="fill"></div>
       <div class="pagings">
         <span class="prev" :class="{cannot: currentPage === 1}" @click="prev(currentPage, currentPage - 1)">prev</span>
         <!-- <span class="active"></span> -->
@@ -124,9 +123,9 @@
       }
     },
     mounted() {
-      let fill = document.querySelector('.fill')
-      fill.style.height = document.querySelector('.pocket .page').offsetHeight + 'px'
-      fill.style.marginTop = document.querySelector('.pocket .page').offsetTop + 'px'
+      let pagings = document.querySelector('.pagings'),
+          p = document.querySelector('.pocket .page')
+      pagings.style.top = p.offsetHeight + p.offsetTop + 'px'
       let videoUpload = document.querySelector('.videoUpload')
       videoUpload.addEventListener('animationend', e => {
         if (e.animationName == 'zoomOut') {
@@ -425,24 +424,17 @@
   .pocket {
     position: relative;
     width: 100%;
-    height: calc(100% - 10px);
+    height: 100%;
     padding-left: 20px;
-    padding-right: 0;
-    // padding-top: 85px;
+    padding-top: 20px;
     padding-bottom: 20px;
     overflow: hidden;
-    .fill {
-      position: relative;
-      // top: 85px;
-      // padding-bottom: 20px;
-      // height: 522px;
-    }
     .page {
-      position: absolute;
+      position: relative;
       width: 100%;
-      top: 85px;
-      left: 20px;
-      padding-right: 20px;
+      // top: 85px;
+      // left: 20px;
+      // padding-right: 20px;
       padding-bottom: 5px;
       overflow: hidden;
     }
@@ -588,7 +580,7 @@
       z-index: 8;
       height: 50px;
       line-height: 50px;
-      margin: 20px auto;
+      // margin: 20px auto;
       background-color: #F9FAFC;
       box-shadow: 0px 3px 3px 2px #e4eeff;
       text-align: center;

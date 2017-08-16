@@ -23,8 +23,6 @@ if (localStorage.getItem('user')) {
   router.push('/login')
 }
 
-
-// router.push('/login')
 new Vue({
   components: { App },
   router,
