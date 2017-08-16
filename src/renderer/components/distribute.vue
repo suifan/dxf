@@ -292,7 +292,7 @@
         left: 0;
         width: 40%;
         height: 100%;
-        background-color: #51a8f5;
+        // background-color: #51a8f5;
       }
       .output {
         position: absolute;
@@ -300,7 +300,7 @@
         right: 0;
         width: 40%;
         height: 100%;
-        background-color: #14d695;
+        // background-color: #14d695;
       }
       .box {
         border: 1px solid #d1dbe5;
@@ -312,8 +312,8 @@
           background-color: #fbfdff;
           border-bottom: 1px solid #d1dbe5;
           text-align: center;
-          color: #505a5e;
-          font-size: 15px;
+          color: #475669;
+          font-size: 16px;
         }
         .content {
           height: calc(100% - 45px);
@@ -323,7 +323,7 @@
             height: 40px;
             line-height: 40px;
             &:hover {
-              background-color: #e4e8f1;
+              background-color: #e4e8f1;//e4e8f1
               cursor: pointer;
             }
             input[type="checkbox"] {
