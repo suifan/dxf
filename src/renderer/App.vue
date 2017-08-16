@@ -3,7 +3,7 @@
     <titleBar></titleBar>
     <div class="_sidebar"></div>
     <!-- <div class="_main"></div> -->
-    <div  class="box" :class="[isMac ? 'mac' : 'win']">
+    <div  class="box" :class="[isMac ? 'mainmac' : 'mainwin']">
       <!-- 侧边栏菜单 -->
       <div class="sidebar" id="sidebar">
         <div class="user">
@@ -76,7 +76,7 @@
   </div>
    <div v-else id="app" onselectstart="return true">
     <titleBar></titleBar>
-    <div class="mainLogin" :class="[isMac ? 'mac' : 'win']">
+    <div class="mainLogin" :class="[isMac ? 'mainmac' : 'mainwin']">
       <router-view></router-view>
     </div>
   </div> 
@@ -359,10 +359,10 @@
     height: calc(100% - 22px);
     background-color: #FFF;
   }
-  .mac {
+  .mainmac {
     height: calc(100% - 22px) !important;
   }
-  .win {
+  .mainwin {
     height: calc(100% - 28px) !important;
   }
 </style>
