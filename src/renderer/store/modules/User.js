@@ -1,11 +1,6 @@
-const CLIENT_THEME = 0 //主题客户端
-const CLIENT_BACKSTAG = 1 //后台客户端
-const CLIENT_CONTROL = 2 //控制台
-
-const state = {
+const state = { 
   loginState: false,
-  user: '',
-  flag: CLIENT_BACKSTAG
+  userInfo: [ ]
 }
 
 const getters = {
@@ -19,18 +14,16 @@ const mutations = {
   signout (state) {
     state.loginState = false
   },
-  initUser (state, payload) {
-    state.user = payload.user
+  pushUser (state, data) {
+    state.userInfo = data
   },
-  addUser (state, payload) {
-    state.user.push(payload.user) 
+  addUser (state, data) {
+    state.userInfo.push(data)
   },
-  delUser (state, payload) {
-    state.user = payload.user
-  },
-  editUser (state, payload) {
-    state.user = payload.user
+  delUser (state, id) {
+    _.remove(state.userInfo, item => item.id === id)
   }
+  
 }
 
 const actions = {
@@ -40,17 +33,14 @@ const actions = {
   signout ({ commit }) {
     commit('signout')
   },
-  initUser ({ commit }, payload) {
-    commit('initUser', payload)
+  pushUser ({ commit }, data) {
+    commit('pushUser', data)
   },
-  addUser ({ commit }, payload) {
-    commit('addUser', payload)
+  addUser ({ commit }, data) {
+    commit('addUser', data)
   },
-  delUser ({ commit }, payload) {
-    commit('delUser', payload)
-  },
-  editUser ({ commit }, payload) {
-    commit('editUser', payload)
+  delUser ({ commit }, id) {
+    commit('delUser', id)
   }
 }
 

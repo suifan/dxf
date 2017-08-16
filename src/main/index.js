@@ -30,7 +30,8 @@ function createWindow () {
     width: 1024,
     height: 768,
     useContentSize: true,
-    backgroundColor: '#373D41',
+    // backgroundColor: '#80FFFF33',
+    transparent: true,
     frame: isMac ? true : false,
     titleBarStyle: isMac ? 'hidden' : 'show'
   })

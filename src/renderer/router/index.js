@@ -12,45 +12,40 @@ export default new Router({
       component: require('@/components/Home')
     },
     {
-      path: '/Login',
-      name: 'Login_0',
+      path: '/login',
+      name: 'login_0',
       component: require('@/components/login')
     },
     {
       path: '/Home',
-      name: 'Home_1',
+      name: 'home_1',
       component: require('@/components/Home')
     },
     {
-      path: '/DistributeUser',
-      name: 'DistributeUser_2',
-      component: require('@/components/distributeUser')
+      path: '/usermg',
+      name: 'usermg_2',
+      component: require('@/components/usermg')
     },
     {
-      path: '/DeviceMonitor',
-      name: 'DeviceMonitor_3',
-      component: require('@/components/DeviceMonitor')
-    },
-    // {
-    //   path: '/DataImport',
-    //   name: 'DataImport_4',
-    //   component: require('@/components/dataImport')
-    // },
-    {
-      path: '/DataUpdate',
-      name: 'DataUpdate_4',
-      component: require('@/components/dataUpdate')
+      path: '/datamg',
+      name: 'datamg_3',
+      component: require('@/components/datamg')
     },
     {
-      path: '/TM/ThemeUpload',
-      name: 'ThemeUpload_5',
-      component: require('@/components/ThemeManager/ThemeUpload')
+      path: '/videomg',
+      name: 'videomg_4',
+      component: require('@/components/videomg')
     },
-    // {
-    //   path: '/TM/ThemeInfo',
-    //   name: 'ThemeInfo',
-    //   component: require('@/components/ThemeManager/ThemeInfo')
-    // },
+    {
+      path: '/log',
+      name: 'log_5',
+      component: require('@/components/log')
+    },
+    {
+      path: '/setting',
+      name: 'setting_6',
+      component: require('@/components/setting')
+    },
     {
       path: '*',
       redirect: '/'

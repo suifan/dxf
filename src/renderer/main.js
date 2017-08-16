@@ -6,7 +6,6 @@ import 'element-ui/lib/theme-default/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 require('./assets/js/jnoos')
-
 import App from './App'
 import router from './router'
 import store from './store'
@@ -21,8 +20,11 @@ if (localStorage.getItem('user')) {
   store.dispatch('signin')
   router.push('/Home')
 }else {
-  router.push('/Login')
+  router.push('/login')
 }
+
+
+// router.push('/Login')
 // store.dispatch('doLogin')
 new Vue({
   components: { App },

@@ -113,9 +113,7 @@ let rendererConfig = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.ProvidePlugin({
-      _: 'lodash',
-      echarts: 'echarts',
-      io: 'socket.io-client'
+      _: 'lodash'
     }),
   ],
   output: {

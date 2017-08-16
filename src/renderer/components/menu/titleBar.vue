@@ -26,7 +26,6 @@ export default {
     ipc.send('platform', ' ')
     ipc.on('isMac', (event, arg) => {
       this.isMac = arg
-      console.log(this.isMac)
     })
   }
 }
@@ -34,14 +33,13 @@ export default {
 
 <style lang="scss" scoped>
 .titleBar {
-  border-bottom: 1px solid #000000;
+  // border-bottom: 1px solid #000000;
   height: 22px;
-  background-color: #24292e;
+  background-color: #F4F8F9;
   .drag {
     display: inline-block;
     width: calc(100% - 132px);
     height: 100%;
-    // background-color: #24292e;
     -webkit-app-region: drag;
   }
   .menu { 
