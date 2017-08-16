@@ -28,7 +28,7 @@
           </router-link>
 
           <router-link @click.native="clicks($event)" @mouseover.native="mouseover($event)" 
-            @mouseout.native="mouseout($event)" to="/datamg" active-class="link-active">
+            @mouseout.native="mouseout($event)" to="/cut" active-class="link-active">
             <div class="mask"></div>
             <i class="fa fa-database"></i>
             <span>数据管理</span>

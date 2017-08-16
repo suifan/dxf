@@ -27,9 +27,9 @@ export default new Router({
       component: require('@/components/usermg')
     },
     {
-      path: '/datamg',
-      name: 'datamg_3',
-      component: require('@/components/datamg')
+      path: '/cut',
+      name: 'cut_3',
+      component: require('@/components/cut')
     },
     {
       path: '/videomg',
