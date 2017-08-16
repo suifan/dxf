@@ -43,7 +43,7 @@
     <div class="rightarrow pointer" @click="toright()">下一张</div>
     <div class="leftarrow pointer" @click="toleft()">上一张</div>
   </div>
-  <div v-else>
+  <div v-else style="width: 100%;height: 100%;">
     <datamg :id="id"></datamg>
   </div>
   
