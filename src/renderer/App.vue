@@ -3,7 +3,7 @@
     <titleBar></titleBar>
     <div class="_sidebar"></div>
     <!-- <div class="_main"></div> -->
-    <div  class="box">
+    <div  class="box" :class="[isMac ? 'mac' : 'win']">
       <!-- 侧边栏菜单 -->
       <div class="sidebar" id="sidebar">
         <div class="user">
@@ -76,7 +76,7 @@
   </div>
    <div v-else id="app" onselectstart="return true">
     <titleBar></titleBar>
-    <div class="mainLogin">
+    <div class="mainLogin" :class="[isMac ? 'mac' : 'win']">
       <router-view></router-view>
     </div>
   </div> 
@@ -87,11 +87,18 @@
   import login from './components/login'
   export default {
     name: 'app',
+    beforeCreate () {
+      const ipc = this.$electron.ipcRenderer
+      ipc.send('platform', ' ')
+      ipc.on('isMac', (event, arg) => {
+        this.isMac = arg
+      })
+    },
     data() {
       return {
+        isMac: false,
         win: this.$electron.remote.BrowserWindow.win,
         activeTop: 7, //激活的路由距离顶部的距离
-        tid: Number,//当鼠标悬停超过800ms就显示title
         enter: 'animated slideInDown',
         leave: 'animated slideOutDown'
       }
@@ -176,8 +183,9 @@
   }
   .box {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 22px);
   }
+  
   ._sidebar {
     position: absolute;
     top: 0;
@@ -196,7 +204,7 @@
     position: relative;
     z-index: 11;
     width: 160px;
-    height: calc(100% - 22px);
+    height: 100%;
     float: left;
     color: #AEB9C2;
     transition: all .8s;
@@ -229,7 +237,6 @@
 
     .router {
       position: relative;
-      height: calc(100% - 245px);
       a {
         position: relative;
         display: inline-block;
@@ -342,7 +349,7 @@
   .main {
     position: relative;
     width: auto;
-    height: calc(100% - 22px);
+    height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
     background-color: #FFF;
@@ -351,5 +358,11 @@
     width: auto;
     height: calc(100% - 22px);
     background-color: #FFF;
+  }
+  .mac {
+    height: calc(100% - 22px) !important;
+  }
+  .win {
+    height: calc(100% - 28px) !important;
   }
 </style>

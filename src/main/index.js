@@ -3,7 +3,7 @@
  * BrowseWindow
  * ipcMain模块可以使主进程和渲染进程之间进行异步通信
  */
-import { app, BrowserWindow, ipcMain, webContents, Menu } from 'electron'
+import { app, BrowserWindow, screen, ipcMain, webContents, Menu } from 'electron'
 import os from 'os'
 /**
  * Set `__static` path to static files in production
@@ -12,7 +12,7 @@ import os from 'os'
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static')
 } 
-     
+
 let mainWindow
 let contents 
 let isMac 
@@ -26,9 +26,15 @@ const winURL = process.env.NODE_ENV === 'development'
   : `file://${__dirname}/index.html`
 
 function createWindow () {
+  let height
+  if(screen.getPrimaryDisplay().size.height<=768) {
+    height = 700
+  }else {
+    height = 768
+  }
   mainWindow = new BrowserWindow({
     width: 1024,
-    height: 768,
+    height: height,
     useContentSize: true,
     // backgroundColor: '#80FFFF33',
     transparent: true,
@@ -55,8 +61,8 @@ function createWindow () {
 
 
 app.on('ready', function () {
-  createWindow()
   
+  createWindow()
 })
 
 app.on('window-all-closed', () => {

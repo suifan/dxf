@@ -124,6 +124,9 @@
       }
     },
     mounted() {
+      let fill = document.querySelector('.fill')
+      fill.style.height = document.querySelector('.pocket .page').offsetHeight + 'px'
+      fill.style.marginTop = document.querySelector('.pocket .page').offsetTop + 'px'
       let videoUpload = document.querySelector('.videoUpload')
       videoUpload.addEventListener('animationend', e => {
         if (e.animationName == 'zoomOut') {
@@ -425,13 +428,14 @@
     height: calc(100% - 10px);
     padding-left: 20px;
     padding-right: 0;
-    padding-top: 85px;
+    // padding-top: 85px;
     padding-bottom: 20px;
     overflow: hidden;
     .fill {
-      // padding-top: 85px;
+      position: relative;
+      // top: 85px;
       // padding-bottom: 20px;
-      height: 522px;
+      // height: 522px;
     }
     .page {
       position: absolute;
@@ -584,7 +588,7 @@
       z-index: 8;
       height: 50px;
       line-height: 50px;
-      margin: 50px auto;
+      margin: 20px auto;
       background-color: #F9FAFC;
       box-shadow: 0px 3px 3px 2px #e4eeff;
       text-align: center;

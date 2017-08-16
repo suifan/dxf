@@ -1,8 +1,11 @@
 <template>
   <div class="menu">
-    <span class="iconfont icon-close" @click="close"></span>
+    <!--<span class="fa icon-close" @click="close"></span>
     <span class="iconfont icon-maximize" @click="maximize($event)"></span>
-    <span class="iconfont icon-minimze" @click="minimize"></span>
+    <span class="iconfont icon-minimze" @click="minimize"></span>-->
+    <span class="fa fa-times" @click="close"></span>
+    <span class="fa fa-window-maximize" @click="maximize($event)"></span>
+    <span class="fa fa-window-minimize" @click="minimize"></span>
   </div>
 </template>
 
@@ -23,11 +26,12 @@ export default {
     maximize(e) {
       if (this.isBig) {
         this.ipc.send('unmaximize')
-        e.target.className = 'iconfont icon-maximize'
+        // e.target.className = 'iconfont icon-maximize'
+        e.target.className = 'fa fa-window-maximize'
         this.isBig = false
       } else {
         this.ipc.send('maximize')
-        e.target.className = 'iconfont icon-restore'
+        e.target.className = 'fa fa-window-restore'
         this.isBig = true
       }
     },
@@ -47,7 +51,7 @@ export default {
   width: autp;
   height: 28px;
   color: #aaaaaa;
-  background-color: #24292e;
+  // background-color: #24292e;
   span {
     // display: inline-block;
     float: right;
@@ -58,7 +62,7 @@ export default {
     transition: all .8s;
     &:hover {
       color: #ffffff;
-      background-color: #828282;
+      background-color: #99A9BF;
     }
     &:first-Child:hover {
       background-color: #ff0000;

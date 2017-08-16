@@ -1,6 +1,5 @@
 <template>
-  <webview src="http://192.168.99.191:8071/#/"></webview>
-  <!--<iframe src="http://192.168.99.191:3001/client?id=2" frameborder="0"></iframe>-->
+  <webview src="http://192.168.99.191:8071/#/?id=2"></webview>
 </template>
 
 <script>
