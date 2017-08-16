@@ -1,9 +1,9 @@
 <template>
-  <div id="app" onselectstart="return false">
+  <div id="app" v-if="this.$store.state.user.loginState" onselectstart="return false">
     <titleBar></titleBar>
     <div class="_sidebar"></div>
     <!-- <div class="_main"></div> -->
-    <div v-if="this.$store.state.user.loginState" class="box">
+    <div  class="box">
       <!-- 侧边栏菜单 -->
       <div class="sidebar" id="sidebar">
         <div class="user">
@@ -59,6 +59,7 @@
           <i class="fa fa-bars"></i>
         </div>
       </div>
+      <!-- 侧边栏菜单end -->
 
       <!-- 主内容区域 -->
       <div class="main">
@@ -68,18 +69,22 @@
           </keep-alive>
         </transition>
       </div>
+      <!-- 主内容区域end -->
     </div>
+
+    
   </div>
-  <!-- <div v-else id="app" onselectstart="return true">
+   <div v-else id="app" onselectstart="return true">
     <titleBar></titleBar>
     <div class="mainLogin">
       <router-view></router-view>
     </div>
-  </div> -->
+  </div> 
 </template>
 
 <script>
   import titleBar from './components/menu/titleBar'
+  import login from './components/login'
   export default {
     name: 'app',
     data() {
@@ -105,7 +110,7 @@
       }
     },
     components: {
-      titleBar
+      titleBar,login
     },
     methods: {
       signout() {
@@ -163,7 +168,12 @@
     width: 100%;
     height: 100%;
   }
-  
+  .login {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 11;
+  }
   .box {
     width: 100%;
     height: 100%;
@@ -173,6 +183,7 @@
     top: 0;
     z-index: 10;
     width: 160px;
+    // width: 100%;
     height: 100%;
     box-sizing: content-box;
     // background: url('./assets/img/dr_18.jpg');
@@ -334,6 +345,11 @@
     height: calc(100% - 22px);
     overflow-x: hidden;
     overflow-y: auto;
+    background-color: #FFF;
+  }
+  .mainLogin {
+    width: auto;
+    height: calc(100% - 22px);
     background-color: #FFF;
   }
 </style>

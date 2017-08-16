@@ -24,8 +24,7 @@ if (localStorage.getItem('user')) {
 }
 
 
-// router.push('/Login')
-// store.dispatch('doLogin')
+// router.push('/login')
 new Vue({
   components: { App },
   router,
