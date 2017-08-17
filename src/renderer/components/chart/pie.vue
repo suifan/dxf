@@ -1,11 +1,10 @@
 <template>
-  <div class="pie-echarts" :id="id">
+  <div class="pie-echarts" ref="pie">
   </div>
 </template>
 
 <script>
    export default {
-     props: ['id'],
      data() {
        return {
          myChart: {},
@@ -20,7 +19,7 @@
      },
      mounted() {
        let that = this
-       this.myChart = echarts.init(document.getElementById(this.id))
+       this.myChart = echarts.init(this.$refs.pie)
        let dataStyle = {
          normal: {
            label: {

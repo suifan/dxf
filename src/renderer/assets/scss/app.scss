@@ -1,6 +1,8 @@
 // @import 'mixin';//导入混合宏
 // @import './assets/font/iconfont.css'; //导入字体样式
+@import './animate.scss';//动画
 @import './color.scss'; //颜色设置
+@import './jn-ui.scss';//自定义ui
 
 //主要色  #7e3ffb 
 //背景色  #F4F8F9 #FFFFFF
@@ -69,15 +71,24 @@ label { margin-bottom: 0;}
 /** 禁止拉伸 **/
 textarea { resize:none }
 
+/** input placeholder样式设置 **/
+input::-webkit-input-placeholder {
+  color: #dee2e5;
+  font-size: 14px;
+}
+
+/** 滚动条样式 **/
 ::-webkit-scrollbar {
   width: 4px;
   height: 6px;
 }
+/** 滚动条轨道样式 **/
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
   border-radius: 10px;
   background-color: rgb(242,243,246);
 }
+/** 滚动条手势样式 **/
 ::-webkit-scrollbar-thumb {
   border-radius: 5px;
   box-shadow: inset 0 0 3px rgba(0,0,0,.1);

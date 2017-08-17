@@ -1,0 +1,33 @@
+// button样式
+.jn-button {
+  position: absolute;
+  top: 13px;
+  right: 0;
+  button {
+    width: 120px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background: #7e3ffb;//8492A6
+    color: #fff;
+    transition: all .8s;
+    &:hover {
+      background: #ad77ff;
+    }
+    i {
+      transition: transform .8s;
+      
+    }
+  }
+  .closed {
+    border: 1px solid #bfcbd9;
+    color: #bfcbd9;
+    background: #eef1f6;
+    &:hover {
+      background: #eef1f6;
+    }
+    i {
+      transform: rotate(405deg)
+    }
+  }
+}

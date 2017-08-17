@@ -16,15 +16,24 @@
           <i class="fa fa-ellipsis-h"></i>
         </div>
         <div class="content">
-          <div class="ipad">
-            <i class="fa fa-tablet"></i>
+          <div class="ipad" :class="{connUser: ipadconnUser}">
+            <i class="fa fa-tablet wobble" @mouseover="mouseover"></i>
+            <span v-if="!ipadconnUser">app admin账号 {{ ipadlogin ? '在线' : '离线中...' }}</span>
+            <span v-else class="br">admin</span>
+            <span v-if="!ipadconnUser" class="noconn" :class="{slideInDown: ipadlogin}">{{ ipadlogin ? '还未连接某个主题账号!' : '' }}</span>
           </div>
-          <div class="line">
-            <i class="fa fa-ellipsis-h"></i>
+          <div v-if="ipadconnUser" class="line">
+            <!-- <i class="fa fa-ellipsis-h"></i> -->
+            <svg viewBox="0 0 229.11 290">
+              <path class="path" fill="none" stroke="#7e3ffb" stroke-width="2" 
+              stroke-opacity="1" d="M0 128 l 228 0 l 0 5 L 0 133z"></path>
+            </svg>
+            <span>时长: 01:29</span>
           </div>
-          <div class="computer">
+          <div v-if="ipadconnUser" class="computer">
             <i class="fa fa-television"></i>
-          </div>
+            <span class="br">{{ '大厅大屏' }}</span>
+          </div> 
         </div>
       </div>
     </div>
@@ -104,12 +113,33 @@ export default {
   name: 'Home',
   data() {
     return {
-      
+      ipadlogin: false,
+      ipadconnUser: false
     }
   },
   components: {Jnline},
   mounted() {
     this.initSocket()
+    let ipadicon = document.querySelector('.ipad .fa-tablet')
+    ipadicon.addEventListener('animationend', e => {
+      if (e.animationName == 'wobble') {
+        ipadicon.classList.remove(e.animationName)
+      }
+    })
+    setTimeout( () => {
+      this.ipadlogin = true
+      ipadicon.classList.add('wobble')
+    }, 3000)
+    setTimeout( () => {
+      this.ipadconnUser = true
+    }, 5000)
+    // setTimeout( () => {
+    //   this.ipadconnUser = false
+    // }, 10000)
+    // setTimeout( () => {
+    //   this.ipadlogin = false
+    //   ipadicon.classList.add('wobble')
+    // }, 13000)
   },
   methods: {
     initSocket() {
@@ -147,6 +177,9 @@ export default {
         this.$store.dispatch('pushThemeList', e.data.theme)
         this.$store.dispatch('pushVideoList', e.data.video)
       })
+    },
+    mouseover (e) {
+      e.target.classList.add('wobble')
     }
   }
 }
@@ -239,36 +272,87 @@ export default {
   }
   .connect {
     height: 360px;
+    .br {
+      position: absolute;
+      top: 163px;
+      left: 0;
+      line-height: 1;
+      width: 100%;
+      color: #475669;
+    }
     .ipad {
-      width: 33.33%;
+      position: relative;
+      // width: 33.33%;
+      width: 100%;
       height: 100%;
-      // display: inline-block;
+      line-height: 290px;
+      text-align: center;
       float: left;
+      transition: all .5s;
       i {
         color: #7e3ffb;
         font-size: 48px;
       }
+      span {
+        color: #475669
+      }
+      .noconn {
+        position: absolute;
+        top: 163px;
+        left: 0;
+        line-height: 1;
+        width: 100%;
+        color: #8492A6
+      }
+    }
+    .connUser {
+      width: 33.33%!important;
     }
     .line {
+      position: relative;
       width: 33.33%;
       height: 100%;
+      line-height: 290px;
+      text-align: center;
       float: left;
-      // display: inline-block;
-      i {
-        color: #7e3ffb;
-        font-size: 48px;
+      span {
+        color: #99A9BF;
+      }
+      svg {
+        position: absolute;
+        left: -40%;
+        width: 171%;
+        height: 100%;
       }
     }
     .computer {
+      position: relative;
       width: 33.33%;
       height: 100%;
+      line-height: 290px;
+      text-align: center;
       float: left;
       // display: inline-block;
       i {
-        color: #2196f3;
+        color: #7e3ffb;
         font-size: 48px;
       }
     }
+  }
+}
+</style>
+<style>
+.path {
+  stroke-dasharray: 5;
+  stroke-dashoffset: 0;
+  animation: dash 8s linear normal infinite;
+}
+@keyframes dash {
+  from {
+      stroke-dashoffset: 0;
+  }
+  to {
+      stroke-dashoffset: 100;
   }
 }
 </style>
